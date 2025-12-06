@@ -1,0 +1,17 @@
+<h1>Login History</h1>
+<table>
+  <tr>
+    <th>User</th>
+    <th>IP Address</th>
+    <th>User Agent</th>
+    <th>Timestamp</th>
+  </tr>
+  {% for entry in history %}
+  <tr>
+    <td>{{ entry.user.email }}</td>
+    <td>{{ entry.ip_address }}</td>
+    <td>{{ entry.user_agent }}</td>
+    <td>{{ entry.timestamp }}</td>
+  </tr>
+  {% endfor %}
+</table>

@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ profile.name }}'s Profile</title>
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+  </head>
+  <body>
+    <div class="profile-container">
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      <div class="profile-header">
+        <div class="avatar">{{ profile.name|first|upper }}</div>
+        <div class="header-text">
+          <h1>{{ profile.name }}</h1>
+          <p>{{ profile.bio }}</p>
+        </div>
+      </div>
+
+      <div class="profile-details">
+        <div class="detail">
+          <strong>School:</strong> {{ profile.name_of_School }}
+        </div>
+        <div class="detail"><strong>State:</strong> {{ profile.state }}</div>
+        <div class="detail"><strong>City:</strong> {{ profile.city }}</div>
+        <div class="detail">
+          <strong>Address:</strong> {{ profile.address }}
+        </div>
+        <div class="detail">
+          <strong>Joined:</strong> {{ profile.date_added }}
+        </div>
+      </div>
+
+      <div class="profile-actions">
+        <a href="{% url 'edit_profile' %}" class="btn">Edit Profile</a>
+        <a href="{% url 'delete' %}" class="btn">Delete Profile</a>
+        <a href="{% url 'logout' %}" class="btn">Logout</a>
+        {% if profile.role == "admin" %}
+        <a href="{% url 'login_history' %}" class="btn">Login History</a>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>

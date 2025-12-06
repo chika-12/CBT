@@ -1,0 +1,109 @@
+body {
+  background-color: #fafafa;
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+
+.profile-container {
+  width: 500px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Profile header */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  background-color: #007bff;
+  color: white;
+  font-size: 36px;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+.profile-header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #333;
+}
+
+.profile-header p {
+  font-size: 14px;
+  color: #555;
+  margin-top: 5px;
+}
+
+/* Profile details */
+.profile-details {
+  margin-top: 20px;
+}
+
+.detail {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+/* Profile action buttons */
+.profile-actions {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn {
+  text-decoration: none;
+  padding: 10px 20px;
+  background-color: blue;
+  color: white;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.btn:hover {
+  background-color: darkblue;
+}
+
+/* Messages */
+.messages {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.messages li {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.messages li.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.messages li.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.messages li.warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}

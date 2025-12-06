@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Signup - CBT</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+  </head>
+  <body>
+    <div class="signup-container">
+      <h1>Create an Account</h1>
+
+      <!-- Display messages -->
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      <!-- Signup Form -->
+      <form method="POST" action="{% url 'signup' %}">
+        {% csrf_token %}
+
+        <!-- First Name -->
+        <label for="first_name">First Name:</label>
+        <input
+          type="text"
+          name="first_name"
+          id="first_name"
+          placeholder="First Name"
+          required
+        />
+
+        <!-- Last Name -->
+        <label for="last_name">Last Name:</label>
+        <input
+          type="text"
+          name="last_name"
+          id="last_name"
+          placeholder="Last Name"
+          required
+        />
+
+        <!-- Email -->
+        <label for="email">Email:</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          placeholder="Enter your email"
+          required
+        />
+
+        <!-- Password -->
+        <label for="password">Password:</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Enter your password"
+          required
+        />
+
+        <!-- Confirm Password -->
+        <label for="confirm_password">Confirm Password:</label>
+        <input
+          type="password"
+          name="confirm_password"
+          id="confirm_password"
+          placeholder="Confirm password"
+          required
+        />
+
+        <!-- Role -->
+        <label for="role">Role:</label>
+        <select name="role" id="role" required>
+          <option value="" disabled selected>Select Role</option>
+          <option value="student">Student</option>
+        </select>
+
+        <button type="submit">Sign Up</button>
+      </form>
+    </div>
+  </body>
+</html>

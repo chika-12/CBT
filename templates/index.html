@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kdc</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+  </head>
+
+  <body>
+    <header class="header">
+      <h1>Karmo Development Center</h1>
+      <p>The computer base test portal of Karmo development center</p>
+    </header>
+
+    <div class="action-links">
+      <a href="{% url 'signup_page' %}" class="signup-btn">Sign Up</a>
+      <a href="{% url 'login_page' %}" class="signup-btn">Login</a>
+    </div>
+  </body>
+</html>

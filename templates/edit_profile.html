@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <style>
+      body {
+        background-color: #f9f9f9;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+      }
+      button {
+        margin-top: 20px;
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .message {
+        text-align: center;
+        color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Edit Profile</h1>
+
+      {% if messages %} {% for message in messages %}
+      <p class="message">{{ message }}</p>
+      {% endfor %} {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <label for="name">Full Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value="{{ profile.name }}"
+          required
+        />
+
+        <label for="name_of_School">School Name</label>
+        <input
+          type="text"
+          id="name_of_School"
+          name="name_of_School"
+          value="{{ profile.name_of_School }}"
+          required
+        />
+
+        <label for="state">State</label>
+        <input
+          type="text"
+          id="state"
+          name="state"
+          value="{{ profile.state }}"
+          required
+        />
+
+        <label for="city">City</label>
+        <input
+          type="text"
+          id="city"
+          name="city"
+          value="{{ profile.city }}"
+          required
+        />
+
+        <label for="address">Address</label>
+        <input
+          type="text"
+          id="address"
+          name="address"
+          value="{{ profile.address }}"
+          required
+        />
+
+        <label for="bio">Bio</label>
+        <textarea id="bio" name="bio" rows="4">{{ profile.bio }}</textarea>
+
+        <button type="submit">Update Profile</button>
+      </form>
+    </div>
+  </body>
+</html>
