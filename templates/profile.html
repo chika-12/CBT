@@ -44,6 +44,9 @@
         <a href="{% url 'logout' %}" class="btn">Logout</a>
         {% if profile.role == "admin" %}
         <a href="{% url 'login_history' %}" class="btn">Login History</a>
+        <a href="{% url 'add_teacher' %}" class="btn">Add Teacher</a>
+        <a href="{% url 'remove_teacher' %}" class="btn">Remove Teacher</a>
+        <a href="{% url 'all_teachers' %}" class="btn">List All Teachers</a>
         {% endif %}
       </div>
     </div>

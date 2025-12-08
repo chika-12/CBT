@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-tzww*0k&r*u3hc1-&0^k!h1vc#x%!43nag8y*-3!c(151pp(%2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["cbt-1-sx6g.onrender.com"]
+ALLOWED_HOSTS = ["cbt-1-sx6g.onrender.com", "127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "users.apps.UsersConfig",
-    "rest_framework"
+    "rest_framework",
+    "exam_management",
 ]
 
 MIDDLEWARE = [
