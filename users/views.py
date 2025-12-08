@@ -36,14 +36,14 @@ def signup(request):
 
   if not password:
     messages.error(request, "Password required")
-    return Response("signup_page")
+    return redirect("signup_page")
   if not email:
     messages.error(request, "Email required")
     return redirect("signup_page")
   
   if password != confirm_password:
     messages.error(request, "Passwords do not match")
-    redirect("signup_page")
+    return redirect("signup_page")
   
   data = serializers.UserSerializers(data=request.data)
   if data.is_valid():
