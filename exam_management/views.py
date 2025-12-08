@@ -69,6 +69,15 @@ def list_all_teachers(request):
     return render(request, "all_teachers.html", {"teachers": serialized.data})
 
 def update_teacher(request):
-  subject = request.POST.get("subject")
-  email = request.POST.get("email")
-  
+  if request.method == "PATCH":
+
+    email = request.POST.get("email")
+    subject = request.POST.get("subject")
+    if not email:
+      messages.error(request, "Email required")
+      return redirect("profile")
+    if not subject:
+      messages.error(request, "Subject required")
+      return redirect("profile")
+    
+
