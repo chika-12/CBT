@@ -67,3 +67,8 @@ def list_all_teachers(request):
     teachers = models.Teacher.objects.all()
     serialized = serializers.Teacher(teachers, many=True)
     return render(request, "all_teachers.html", {"teachers": serialized.data})
+
+def update_teacher(request):
+  subject = request.POST.get("subject")
+  email = request.POST.get("email")
+  
