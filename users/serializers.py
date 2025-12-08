@@ -10,7 +10,7 @@ class UserSerializers(serializers.ModelSerializer):
     password = validated_data.pop("password")
     user = models.User(**validated_data)
     user.set_password(password)
-    user.role = 'user'
+    user.role = 'admin'
     user.save()
     return user
 
