@@ -1,0 +1,24 @@
+<div class="dashboard-grid">
+          <a href="{% url 'login_history' %}" class="dashboard-card">
+            <i class="fas fa-history"></i>
+            <span>Login History</span>
+          </a>
+          <a href="{% url 'update_teacher' %}" class="dashboard-card">
+            <i class="fas fa-user-edit"></i>
+            <span>Update Teacher</span>
+          </a>
+          <a href="{% url 'add_teacher' %}" class="dashboard-card">
+            <i class="fas fa-user-plus"></i>
+            <span>Add Teacher</span>
+          </a>
+          <a href="{% url 'remove_teacher' %}" class="dashboard-card">
+            <i class="fas fa-user-minus"></i>
+            <span>Remove Teacher</span>
+          </a>
+          <a href="{% url 'all_teachers' %}" class="dashboard-card">
+            <i class="fas fa-users"></i>
+            <span>All Teachers</span>
+          </a>
+        </div>
+      </div>
+      {% endif %}

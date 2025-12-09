@@ -469,12 +469,6 @@
       .action-btn:nth-child(3) i {
         background: linear-gradient(135deg, var(--warning), #d97706);
       }
-      .action-btn:nth-child(4) i {
-        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-      }
-      .action-btn:nth-child(5) i {
-        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-      }
 
       .action-btn:hover i {
         transform: scale(1.1);
@@ -485,83 +479,136 @@
         font-size: 1rem;
       }
 
-      /* Admin Dashboard */
-      .admin-dashboard {
-        background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+      /* Admin Dashboard Section */
+      .admin-dashboard-section {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
         border-radius: var(--border-radius);
         padding: 40px;
         margin-top: 40px;
-        border: 2px solid var(--primary-light);
+        text-align: center;
         animation: slideUp 0.6s ease-out 0.4s both;
+        box-shadow: 0 20px 60px rgba(79, 70, 229, 0.2);
       }
 
-      .dashboard-header {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-bottom: 30px;
+      .admin-dashboard-content {
+        max-width: 600px;
+        margin: 0 auto;
       }
 
-      .dashboard-header i {
-        width: 50px;
-        height: 50px;
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 24px;
+      .admin-dashboard-section i {
+        font-size: 64px;
+        margin-bottom: 20px;
+        display: block;
       }
 
-      .dashboard-header h3 {
+      .admin-dashboard-section h3 {
         font-family: "Poppins", sans-serif;
-        font-size: 1.8rem;
-        color: var(--dark);
+        font-size: 2rem;
+        margin-bottom: 10px;
+        color: white;
       }
 
-      .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 20px;
+      .admin-dashboard-section p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 25px;
+        line-height: 1.6;
       }
 
-      .dashboard-card {
+      .admin-btn {
+        display: inline-block;
         background: white;
-        border-radius: 16px;
-        padding: 25px;
+        color: var(--primary);
+        padding: 12px 35px;
+        border-radius: 50px;
         text-decoration: none;
-        color: var(--dark);
+        font-weight: 600;
+        font-size: 1.1rem;
         transition: var(--transition);
         border: 2px solid transparent;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
+        margin-top: 10px;
       }
 
-      .dashboard-card:hover {
-        transform: translateY(-5px);
+      .admin-btn:hover {
+        background: #f8f9fa;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         border-color: var(--primary);
-        box-shadow: 0 15px 40px rgba(79, 70, 229, 0.15);
       }
 
-      .dashboard-card i {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
+      /* Teacher Dashboard Section */
+      .teacher-dashboard-section {
+        background: linear-gradient(135deg, #4caf50, #2e7d32);
         color: white;
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: var(--border-radius);
+        padding: 40px;
+        margin-top: 40px;
+        text-align: center;
+        animation: slideUp 0.6s ease-out 0.4s both;
+        box-shadow: 0 20px 60px rgba(76, 175, 80, 0.2);
       }
 
-      .dashboard-card span {
+      .teacher-dashboard-content {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .teacher-dashboard-section i {
+        font-size: 64px;
+        margin-bottom: 20px;
+        display: block;
+      }
+
+      .teacher-dashboard-section h3 {
+        font-family: "Poppins", sans-serif;
+        font-size: 2rem;
+        margin-bottom: 10px;
+        color: white;
+      }
+
+      .teacher-dashboard-section p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 25px;
+        line-height: 1.6;
+      }
+
+      .teacher-btn {
+        display: inline-block;
+        background: white;
+        color: #2e7d32;
+        padding: 12px 35px;
+        border-radius: 50px;
+        text-decoration: none;
         font-weight: 600;
+        font-size: 1.1rem;
+        transition: var(--transition);
+        border: 2px solid transparent;
+        margin-top: 10px;
+      }
+
+      .teacher-btn:hover {
+        background: #f8f9fa;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        border-color: #2e7d32;
+      }
+
+      /* Back to Profile Link */
+      .back-to-profile {
+        display: inline-block;
+        margin-top: 15px;
+        color: white;
+        text-decoration: none;
         font-size: 0.95rem;
+        opacity: 0.9;
+        transition: var(--transition);
+      }
+
+      .back-to-profile:hover {
+        opacity: 1;
+        text-decoration: underline;
       }
 
       /* Badge for Admin */
@@ -632,12 +679,19 @@
           grid-template-columns: repeat(2, 1fr);
         }
 
-        .dashboard-grid {
-          grid-template-columns: repeat(2, 1fr);
+        .admin-dashboard-section,
+        .teacher-dashboard-section {
+          padding: 30px 25px;
         }
 
-        .admin-dashboard {
-          padding: 30px 25px;
+        .admin-dashboard-section i,
+        .teacher-dashboard-section i {
+          font-size: 48px;
+        }
+
+        .admin-dashboard-section h3,
+        .teacher-dashboard-section h3 {
+          font-size: 1.6rem;
         }
       }
 
@@ -670,15 +724,32 @@
           grid-template-columns: 1fr;
         }
 
-        .dashboard-grid {
-          grid-template-columns: 1fr;
-        }
-
         .admin-badge {
           top: 10px;
           right: 10px;
           font-size: 0.8rem;
           padding: 6px 15px;
+        }
+
+        .admin-dashboard-section,
+        .teacher-dashboard-section {
+          padding: 25px 20px;
+        }
+
+        .admin-dashboard-section i,
+        .teacher-dashboard-section i {
+          font-size: 40px;
+        }
+
+        .admin-dashboard-section h3,
+        .teacher-dashboard-section h3 {
+          font-size: 1.4rem;
+        }
+
+        .admin-btn,
+        .teacher-btn {
+          padding: 10px 25px;
+          font-size: 1rem;
         }
       }
 
@@ -698,16 +769,6 @@
 
         .action-btn {
           padding: 20px 15px;
-        }
-
-        .dashboard-header {
-          flex-direction: column;
-          text-align: center;
-          gap: 10px;
-        }
-
-        .dashboard-header h3 {
-          font-size: 1.5rem;
         }
       }
 
@@ -886,34 +947,74 @@
         </div>
       </div>
 
-      <!-- Admin Dashboard (Only for Admin Users) -->
+      <!-- Admin Dashboard Section (Single Link) -->
       {% if profile.role == "admin" %}
-      <div class="admin-dashboard">
-        <div class="dashboard-header">
-          <i class="fas fa-chalkboard-teacher"></i>
-          <h3>Administrator Dashboard</h3>
-        </div>
+      <div class="admin-dashboard-section">
+        <div class="admin-dashboard-content">
+          <i class="fas fa-crown"></i>
+          <h3>Administrator Access</h3>
+          <p>
+            You have administrator privileges. Click the button below to access
+            the full Admin Dashboard where you can manage users, teachers, and
+            system settings.
+          </p>
 
-        <div class="dashboard-grid">
-          <a href="{% url 'login_history' %}" class="dashboard-card">
-            <i class="fas fa-history"></i>
-            <span>Login History</span>
+          <a href="{% url 'admin_dashboard' %}" class="admin-btn">
+            <i class="fas fa-tachometer-alt" style="margin-right: 8px"></i>
+            Go to Admin Dashboard
           </a>
-          <a href="{% url 'update_teacher' %}" class="dashboard-card">
-            <i class="fas fa-user-edit"></i>
-            <span>Update Teacher</span>
-          </a>
-          <a href="{% url 'add_teacher' %}" class="dashboard-card">
-            <i class="fas fa-user-plus"></i>
-            <span>Add Teacher</span>
-          </a>
-          <a href="{% url 'remove_teacher' %}" class="dashboard-card">
-            <i class="fas fa-user-minus"></i>
-            <span>Remove Teacher</span>
-          </a>
-          <a href="{% url 'all_teachers' %}" class="dashboard-card">
-            <i class="fas fa-users"></i>
-            <span>All Teachers</span>
+
+          <!-- Quick Admin Actions (Optional small links) -->
+          <div
+            style="
+              margin-top: 25px;
+              display: flex;
+              gap: 15px;
+              justify-content: center;
+              flex-wrap: wrap;
+            "
+          >
+            <a
+              href="{% url 'add_teacher' %}"
+              style="color: white; text-decoration: none; font-size: 0.9rem"
+            >
+              <i class="fas fa-user-plus" style="margin-right: 5px"></i>
+              Add Teacher
+            </a>
+            <a
+              href="{% url 'all_teachers' %}"
+              style="color: white; text-decoration: none; font-size: 0.9rem"
+            >
+              <i class="fas fa-users" style="margin-right: 5px"></i>
+              View Teachers
+            </a>
+            <a
+              href="{% url 'login_history' %}"
+              style="color: white; text-decoration: none; font-size: 0.9rem"
+            >
+              <i class="fas fa-history" style="margin-right: 5px"></i>
+              Login History
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Teacher Dashboard Section (When user is a teacher) -->
+      {% if profile.role == "teacher" %}
+      <div class="teacher-dashboard-section">
+        <div class="teacher-dashboard-content">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <h3>Welcome, Teacher!</h3>
+          <p>
+            You are logged in as a teacher. Click the button below to access the
+            Teacher Dashboard where you can create tests, manage questions, and
+            view student results.
+          </p>
+
+          <a href="{% url 'teacher_dashboard' %}" class="teacher-btn">
+            <i class="fas fa-rocket" style="margin-right: 8px"></i>
+            Go to Teacher Dashboard
           </a>
         </div>
       </div>
@@ -928,14 +1029,14 @@
               profileCard.style.animation = 'slideUp 0.6s ease-out 0.2s both';
           }
 
-          // Add hover effects to dashboard cards
-          const dashboardCards = document.querySelectorAll('.dashboard-card, .action-btn');
-          dashboardCards.forEach(card => {
-              card.addEventListener('mouseenter', function() {
+          // Add hover effects to buttons
+          const buttons = document.querySelectorAll('.action-btn, .admin-btn, .teacher-btn');
+          buttons.forEach(btn => {
+              btn.addEventListener('mouseenter', function() {
                   this.style.transform = 'translateY(-5px)';
               });
 
-              card.addEventListener('mouseleave', function() {
+              btn.addEventListener('mouseleave', function() {
                   this.style.transform = 'translateY(0)';
               });
           });
@@ -955,7 +1056,7 @@
           });
 
           // Add loading animation to buttons on click
-          const actionButtons = document.querySelectorAll('.action-btn, .dashboard-card');
+          const actionButtons = document.querySelectorAll('.action-btn, .admin-btn, .teacher-btn');
           actionButtons.forEach(btn => {
               btn.addEventListener('click', function(e) {
                   if (!this.getAttribute('href').includes('logout')) {
@@ -990,6 +1091,22 @@
                   e.preventDefault();
                   document.querySelector('[href="{% url 'logout' %}"]').click();
               }
+
+              // Ctrl+A for Admin Dashboard (if admin)
+              {% if profile.role == "admin" %}
+              if (e.ctrlKey && e.key === 'a') {
+                  e.preventDefault();
+                  window.location.href = "{% url 'admin_dashboard' %}";
+              }
+              {% endif %}
+
+              // Ctrl+T for Teacher Dashboard (if teacher)
+              {% if profile.role == "teacher" %}
+              if (e.ctrlKey && e.key === 't') {
+                  e.preventDefault();
+                  window.location.href = "{% url 'teacher_dashboard' %}";
+              }
+              {% endif %}
           });
 
           // Add active status indicator animation
@@ -1001,32 +1118,6 @@
           if (profileMeta) {
               profileMeta.appendChild(statusIndicator);
           }
-
-          // Add smooth scroll for any anchor links
-          document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-              anchor.addEventListener('click', function(e) {
-                  e.preventDefault();
-                  const targetId = this.getAttribute('href');
-                  if (targetId === '#') return;
-
-                  const targetElement = document.querySelector(targetId);
-                  if (targetElement) {
-                      window.scrollTo({
-                          top: targetElement.offsetTop - 20,
-                          behavior: 'smooth'
-                      });
-                  }
-              });
-          });
-
-          // Initialize tooltips
-          const tooltipElements = document.querySelectorAll('.dashboard-card, .action-btn');
-          tooltipElements.forEach(el => {
-              el.addEventListener('mouseenter', function() {
-                  const title = this.querySelector('span').textContent;
-                  this.setAttribute('title', title);
-              });
-          });
       });
     </script>
 
