@@ -10,6 +10,9 @@ User = get_user_model()
 @login_required
 def create_teacher(request):
   if request.method == "POST":
+    if request.user.role != "admin":
+      messages.error(request, "Unauthorized action")
+      return redirect("profile")
 
     email = request.POST.get("email")
     subject = request.POST.get("subject")
@@ -29,7 +32,9 @@ def create_teacher(request):
       messages.warning(request, "This user is already a teacher")
       return redirect("profile")
 
-    models.Teacher.objects.create(user=user, subject=subject)
+    teacher = models.Teacher.objects.create(user=user, subject=subject)
+    teacher.is_active = True
+    teacher.save()
     messages.success(request, "Action Successfull")
     return redirect("profile")
   return render(request, "add_teacher.html")
@@ -66,6 +71,9 @@ def remove_teacher(request):
 @login_required
 def list_all_teachers(request):
   if request.method == "GET":
+    if request.user.role != "admin":
+      messages.error(request, "Unauthorized action")
+      return redirect("profile")
     teachers = models.Teacher.objects.all()
     serialized = serializers.Teacher(teachers, many=True)
     return render(request, "all_teachers.html", {"teachers": serialized.data})
@@ -91,6 +99,7 @@ def update_teacher(request):
       return redirect("profile")
     teacher = models.Teacher.objects.get(user=user)
     teacher.subject = subject
+    teacher.is_active = True
     teacher.save()
     messages.success(request, "Action Successfull", extra_tags='alert-success')
     return redirect("profile")
