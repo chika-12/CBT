@@ -4,120 +4,941 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Edit Profile</title>
-    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <title>Edit Profile • Account Settings</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      body {
-        background-color: #f9f9f9;
-        font-family: Arial, sans-serif;
+      :root {
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+        --primary-light: #e0e7ff;
+        --secondary: #7c3aed;
+        --success: #10b981;
+        --success-light: #d1fae5;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --light: #f8fafc;
+        --dark: #1e293b;
+        --gray: #64748b;
+        --gray-light: #e2e8f0;
+        --border-radius: 16px;
+        --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        --shadow-hover: 0 20px 60px rgba(79, 70, 229, 0.15);
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .container {
-        max-width: 600px;
-        margin: 40px auto;
-        padding: 20px;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-      h1 {
-        text-align: center;
-        margin-bottom: 20px;
-      }
-      label {
-        display: block;
-        margin-top: 10px;
-        font-weight: bold;
-      }
-      input,
-      textarea {
-        width: 100%;
-        padding: 8px;
-        margin-top: 5px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
+
+      * {
+        margin: 0;
+        padding: 0;
         box-sizing: border-box;
       }
-      button {
-        margin-top: 20px;
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%);
+        color: var(--dark);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      /* Background Decorative Elements */
+      .bg-decoration {
+        position: absolute;
+        z-index: -1;
+        opacity: 0.05;
+      }
+
+      .bg-1 {
+        top: 10%;
+        right: 10%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+        border-radius: 50%;
+      }
+
+      .bg-2 {
+        bottom: 10%;
+        left: 10%;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(
+          circle,
+          var(--secondary) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+      }
+
+      /* Main Container */
+      .container {
         width: 100%;
-        padding: 10px;
-        background-color: #007bff;
-        border: none;
-        border-radius: 4px;
+        max-width: 800px;
+        animation: slideUp 0.6s ease-out;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Header Section */
+      .header-card {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
         color: white;
-        font-size: 16px;
-        cursor: pointer;
-      }
-      button:hover {
-        background-color: #0056b3;
-      }
-      .message {
+        padding: 35px;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
         text-align: center;
-        color: green;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header-card::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+      }
+
+      .header-icon {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 30px rgba(79, 70, 229, 0.3);
+      }
+
+      .header-icon i {
+        font-size: 36px;
+      }
+
+      h1 {
+        font-family: "Poppins", sans-serif;
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .subtitle {
+        font-size: 16px;
+        opacity: 0.95;
+        max-width: 500px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+        line-height: 1.6;
+      }
+
+      /* Profile Card */
+      .profile-card {
+        background: white;
+        padding: 40px;
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+        box-shadow: var(--shadow);
+        position: relative;
+      }
+
+      /* Messages Styling */
+      .messages-container {
+        margin-bottom: 30px;
+        animation: fadeIn 0.5s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .message {
+        padding: 18px 20px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-weight: 500;
+        border-left: 4px solid;
+        animation: slideInRight 0.5s ease;
+      }
+
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .message.success {
+        background: var(--success-light);
+        color: #065f46;
+        border-left-color: var(--success);
+      }
+
+      .message.error {
+        background: #fee2e2;
+        color: #991b1b;
+        border-left-color: #ef4444;
+      }
+
+      .message.info {
+        background: #dbeafe;
+        color: #1e40af;
+        border-left-color: #3b82f6;
+      }
+
+      .message i {
+        font-size: 20px;
+        flex-shrink: 0;
+      }
+
+      /* Form Layout */
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+      }
+
+      /* Form Elements */
+      .form-group {
+        position: relative;
+      }
+
+      .form-group.full-width {
+        grid-column: span 2;
+      }
+
+      .form-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 12px;
+        font-size: 15px;
+      }
+
+      .form-label i {
+        color: var(--primary);
+        font-size: 18px;
+        width: 24px;
+      }
+
+      .input-wrapper {
+        position: relative;
+      }
+
+      .form-input,
+      .form-textarea {
+        width: 100%;
+        padding: 16px 20px 16px 50px;
+        border: 2px solid var(--gray-light);
+        border-radius: 12px;
+        font-size: 16px;
+        font-family: "Inter", sans-serif;
+        background: var(--light);
+        transition: var(--transition);
+        color: var(--dark);
+      }
+
+      .form-textarea {
+        padding: 16px 20px;
+        min-height: 120px;
+        resize: vertical;
+        line-height: 1.5;
+      }
+
+      .form-input:focus,
+      .form-textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 4px var(--primary-light);
+      }
+
+      .form-input::placeholder,
+      .form-textarea::placeholder {
+        color: #94a3b8;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray);
+        font-size: 18px;
+        transition: var(--transition);
+      }
+
+      .form-input:focus + .input-icon,
+      .form-textarea:focus + .input-icon {
+        color: var(--primary);
+      }
+
+      .char-counter {
+        text-align: right;
+        font-size: 12px;
+        color: var(--gray);
+        margin-top: 5px;
+      }
+
+      /* Profile Preview */
+      .profile-preview {
+        background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+        border-radius: var(--border-radius);
+        padding: 30px;
+        margin-bottom: 30px;
+        border: 2px dashed var(--primary-light);
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        transition: var(--transition);
+      }
+
+      .profile-preview:hover {
+        border-color: var(--primary);
+        transform: translateY(-2px);
+      }
+
+      .preview-avatar {
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 36px;
+        font-weight: 700;
+        flex-shrink: 0;
+        box-shadow: 0 8px 30px rgba(79, 70, 229, 0.3);
+      }
+
+      .preview-info h3 {
+        font-family: "Poppins", sans-serif;
+        font-size: 24px;
+        color: var(--dark);
+        margin-bottom: 8px;
+      }
+
+      .preview-info p {
+        color: var(--gray);
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 5px;
+      }
+
+      .preview-info p i {
+        width: 16px;
+      }
+
+      /* Action Buttons */
+      .action-buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 40px;
+        padding-top: 30px;
+        border-top: 1px solid var(--gray-light);
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 32px;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: var(--transition);
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        font-family: "Inter", sans-serif;
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          to right,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: white;
+        flex: 1;
+        justify-content: center;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .btn-secondary {
+        background: white;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+        padding: 14px 28px;
+      }
+
+      .btn-secondary:hover {
+        background: var(--primary-light);
+        transform: translateY(-2px);
+      }
+
+      /* Form Validation */
+      .error-message {
+        color: var(--danger);
+        font-size: 14px;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        display: none;
+      }
+
+      .error-message.show {
+        display: flex;
+      }
+
+      .form-input.error,
+      .form-textarea.error {
+        border-color: var(--danger);
+        background: #fef2f2;
+      }
+
+      /* Loading State */
+      .btn-primary.loading {
+        position: relative;
+        color: transparent;
+      }
+
+      .btn-primary.loading::after {
+        content: "";
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        border: 3px solid white;
+        border-radius: 50%;
+        border-top-color: transparent;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Success Animation */
+      @keyframes successPulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .success {
+        animation: successPulse 0.6s ease;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .container {
+          max-width: 100%;
+        }
+
+        .header-card {
+          padding: 30px 20px;
+        }
+
+        .header-icon {
+          width: 70px;
+          height: 70px;
+        }
+
+        .header-icon i {
+          font-size: 32px;
+        }
+
+        h1 {
+          font-size: 28px;
+        }
+
+        .profile-card {
+          padding: 30px 25px;
+        }
+
+        .form-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+
+        .form-group.full-width {
+          grid-column: span 1;
+        }
+
+        .profile-preview {
+          flex-direction: column;
+          text-align: center;
+          padding: 25px;
+        }
+
+        .preview-avatar {
+          width: 80px;
+          height: 80px;
+          font-size: 28px;
+        }
+
+        .action-buttons {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        body {
+          padding: 15px;
+        }
+
+        h1 {
+          font-size: 24px;
+        }
+
+        .subtitle {
+          font-size: 14px;
+        }
+
+        .profile-card {
+          padding: 25px 20px;
+        }
+
+        .form-input,
+        .form-textarea {
+          padding: 14px 15px 14px 45px;
+          font-size: 15px;
+        }
+
+        .input-icon {
+          left: 15px;
+        }
+
+        .preview-info h3 {
+          font-size: 20px;
+        }
       }
     </style>
   </head>
   <body>
+    <!-- Background Decorations -->
+    <div class="bg-decoration bg-1"></div>
+    <div class="bg-decoration bg-2"></div>
+
     <div class="container">
-      <h1>Edit Profile</h1>
+      <!-- Header -->
+      <div class="header-card">
+        <div class="header-icon">
+          <i class="fas fa-user-edit"></i>
+        </div>
+        <h1>Edit Profile</h1>
+        <p class="subtitle">
+          Update your personal information, school details, and profile bio
+        </p>
+      </div>
 
-      {% if messages %} {% for message in messages %}
-      <p class="message">{{ message }}</p>
-      {% endfor %} {% endif %}
+      <!-- Profile Card -->
+      <div class="profile-card">
+        <!-- Messages -->
+        <div class="messages-container">
+          {% if messages %} {% for message in messages %}
+          <div class="message {{ message.tags }}">
+            {% if message.tags == 'success' %}
+            <i class="fas fa-check-circle"></i>
+            {% elif message.tags == 'error' %}
+            <i class="fas fa-exclamation-circle"></i>
+            {% else %}
+            <i class="fas fa-info-circle"></i>
+            {% endif %}
+            <span>{{ message }}</span>
+          </div>
+          {% endfor %} {% endif %}
+        </div>
 
-      <form method="POST">
-        {% csrf_token %}
+        <!-- Profile Preview -->
+        <div class="profile-preview">
+          <div class="preview-avatar" id="avatarPreview">
+            {{ profile.name|first|upper }}
+          </div>
+          <div class="preview-info">
+            <h3 id="namePreview">{{ profile.name|default:"Your Name" }}</h3>
+            <p>
+              <i class="fas fa-school"></i>
+              <span id="schoolPreview"
+                >{{ profile.name_of_School|default:"School Name" }}</span
+              >
+            </p>
+            <p>
+              <i class="fas fa-map-marker-alt"></i>
+              <span id="locationPreview"
+                >{{ profile.city|default:"City" }}, {{
+                profile.state|default:"State" }}</span
+              >
+            </p>
+          </div>
+        </div>
 
-        <label for="name">Full Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value="{{ profile.name }}"
-          required
-        />
+        <!-- Edit Form -->
+        <form method="POST" id="profileForm">
+          {% csrf_token %}
 
-        <label for="name_of_School">School Name</label>
-        <input
-          type="text"
-          id="name_of_School"
-          name="name_of_School"
-          value="{{ profile.name_of_School }}"
-          required
-        />
+          <div class="form-grid">
+            <!-- Full Name -->
+            <div class="form-group">
+              <label class="form-label">
+                <i class="fas fa-user"></i>
+                Full Name
+              </label>
+              <div class="input-wrapper">
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  class="form-input"
+                  value="{{ profile.name|default:'' }}"
+                  placeholder="Enter your full name"
+                  required
+                  autocomplete="name"
+                />
+                <div class="input-icon">
+                  <i class="fas fa-signature"></i>
+                </div>
+              </div>
+            </div>
 
-        <label for="state">State</label>
-        <input
-          type="text"
-          id="state"
-          name="state"
-          value="{{ profile.state }}"
-          required
-        />
+            <!-- School Name -->
+            <div class="form-group">
+              <label class="form-label">
+                <i class="fas fa-school"></i>
+                School Name
+              </label>
+              <div class="input-wrapper">
+                <input
+                  type="text"
+                  id="name_of_School"
+                  name="name_of_School"
+                  class="form-input"
+                  value="{{ profile.name_of_School|default:'' }}"
+                  placeholder="Enter your school name"
+                  required
+                  autocomplete="organization"
+                />
+                <div class="input-icon">
+                  <i class="fas fa-university"></i>
+                </div>
+              </div>
+            </div>
 
-        <label for="city">City</label>
-        <input
-          type="text"
-          id="city"
-          name="city"
-          value="{{ profile.city }}"
-          required
-        />
+            <!-- State -->
+            <div class="form-group">
+              <label class="form-label">
+                <i class="fas fa-map"></i>
+                State
+              </label>
+              <div class="input-wrapper">
+                <input
+                  type="text"
+                  id="state"
+                  name="state"
+                  class="form-input"
+                  value="{{ profile.state|default:'' }}"
+                  placeholder="Enter your state"
+                  required
+                  autocomplete="region"
+                />
+                <div class="input-icon">
+                  <i class="fas fa-globe-americas"></i>
+                </div>
+              </div>
+            </div>
 
-        <label for="address">Address</label>
-        <input
-          type="text"
-          id="address"
-          name="address"
-          value="{{ profile.address }}"
-          required
-        />
+            <!-- City -->
+            <div class="form-group">
+              <label class="form-label">
+                <i class="fas fa-city"></i>
+                City
+              </label>
+              <div class="input-wrapper">
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  class="form-input"
+                  value="{{ profile.city|default:'' }}"
+                  placeholder="Enter your city"
+                  required
+                  autocomplete="address-level2"
+                />
+                <div class="input-icon">
+                  <i class="fas fa-building"></i>
+                </div>
+              </div>
+            </div>
 
-        <label for="bio">Bio</label>
-        <textarea id="bio" name="bio" rows="4">{{ profile.bio }}</textarea>
+            <!-- Address -->
+            <div class="form-group full-width">
+              <label class="form-label">
+                <i class="fas fa-home"></i>
+                Address
+              </label>
+              <div class="input-wrapper">
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  class="form-input"
+                  value="{{ profile.address|default:'' }}"
+                  placeholder="Enter your full address"
+                  required
+                  autocomplete="street-address"
+                />
+                <div class="input-icon">
+                  <i class="fas fa-map-pin"></i>
+                </div>
+              </div>
+            </div>
 
-        <button type="submit">Update Profile</button>
-      </form>
+            <!-- Bio -->
+            <div class="form-group full-width">
+              <label class="form-label">
+                <i class="fas fa-edit"></i>
+                Bio
+              </label>
+              <div class="input-wrapper">
+                <textarea
+                  id="bio"
+                  name="bio"
+                  class="form-textarea"
+                  placeholder="Tell us about yourself, your experience, or your teaching philosophy..."
+                  rows="4"
+                >
+{{ profile.bio|default:'' }}</textarea
+                >
+                <div class="input-icon">
+                  <i class="fas fa-comment-alt"></i>
+                </div>
+              </div>
+              <div class="char-counter">
+                <span id="charCount">0</span> / 500 characters
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <a href="{% url 'profile' %}" class="btn btn-secondary">
+              <i class="fas fa-arrow-left"></i>
+              Back to Profile
+            </a>
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+              <i class="fas fa-save"></i>
+              Update Profile
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("profileForm");
+        const submitBtn = document.getElementById("submitBtn");
+        const bioTextarea = document.getElementById("bio");
+        const charCount = document.getElementById("charCount");
+        const avatarPreview = document.getElementById("avatarPreview");
+        const namePreview = document.getElementById("namePreview");
+        const schoolPreview = document.getElementById("schoolPreview");
+        const locationPreview = document.getElementById("locationPreview");
+
+        // Character counter for bio
+        bioTextarea.addEventListener("input", function () {
+          const count = this.value.length;
+          charCount.textContent = count;
+
+          if (count > 500) {
+            this.classList.add("error");
+            charCount.style.color = "var(--danger)";
+          } else {
+            this.classList.remove("error");
+            charCount.style.color = "var(--gray)";
+          }
+        });
+
+        // Initialize character count
+        charCount.textContent = bioTextarea.value.length;
+
+        // Update preview in real-time
+        const inputs = document.querySelectorAll(
+          "#name, #name_of_School, #state, #city"
+        );
+        inputs.forEach((input) => {
+          input.addEventListener("input", updatePreview);
+        });
+
+        function updatePreview() {
+          // Update name preview
+          const name = document.getElementById("name").value || "Your Name";
+          namePreview.textContent = name;
+          avatarPreview.textContent = name.charAt(0).toUpperCase();
+
+          // Update school preview
+          const school =
+            document.getElementById("name_of_School").value || "School Name";
+          schoolPreview.textContent = school;
+
+          // Update location preview
+          const city = document.getElementById("city").value || "City";
+          const state = document.getElementById("state").value || "State";
+          locationPreview.textContent = `${city}, ${state}`;
+        }
+
+        // Initialize preview
+        updatePreview();
+
+        // Form validation
+        function validateForm() {
+          let isValid = true;
+          const requiredFields = document.querySelectorAll(
+            "input[required], textarea[required]"
+          );
+
+          requiredFields.forEach((field) => {
+            if (!field.value.trim()) {
+              field.classList.add("error");
+              isValid = false;
+            } else {
+              field.classList.remove("error");
+            }
+          });
+
+          // Bio length validation
+          if (bioTextarea.value.length > 500) {
+            bioTextarea.classList.add("error");
+            isValid = false;
+          }
+
+          return isValid;
+        }
+
+        // Form submission
+        form.addEventListener("submit", function (e) {
+          if (!validateForm()) {
+            e.preventDefault();
+            submitBtn.classList.add("error");
+            setTimeout(() => submitBtn.classList.remove("error"), 300);
+
+            // Scroll to first error
+            const firstError = document.querySelector(".error");
+            if (firstError) {
+              firstError.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+              });
+            }
+            return;
+          }
+
+          // Show loading state
+          submitBtn.classList.add("loading");
+          submitBtn.disabled = true;
+
+          // Add success animation after a delay
+          setTimeout(() => {
+            submitBtn.classList.remove("loading");
+            submitBtn.classList.add("success");
+            submitBtn.innerHTML =
+              '<i class="fas fa-check"></i> Profile Updated!';
+          }, 1500);
+        });
+
+        // Input focus effects
+        const formElements = document.querySelectorAll(
+          ".form-input, .form-textarea"
+        );
+        formElements.forEach((element) => {
+          element.addEventListener("focus", function () {
+            this.parentElement.parentElement.classList.add("focused");
+          });
+
+          element.addEventListener("blur", function () {
+            this.parentElement.parentElement.classList.remove("focused");
+          });
+        });
+
+        // Auto-focus first field
+        document.getElementById("name").focus();
+
+        // Auto-hide messages after 5 seconds
+        const messages = document.querySelectorAll(".message");
+        messages.forEach((message) => {
+          setTimeout(() => {
+            message.style.transition = "opacity 0.5s ease";
+            message.style.opacity = "0";
+            setTimeout(() => {
+              message.style.display = "none";
+            }, 500);
+          }, 5000);
+        });
+      });
+    </script>
   </body>
 </html>

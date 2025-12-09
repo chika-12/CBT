@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Update Teacher Subject</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .admin-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #ef4444;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 500px;
+      }
+
+      .card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        animation: slideUp 0.5s ease-out;
+        position: relative;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .card-header {
+        background: linear-gradient(to right, #1e40af, #3b82f6);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .card-header h1 {
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+        font-size: 28px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      .card-header h1 i {
+        font-size: 32px;
+      }
+
+      .card-header p {
+        opacity: 0.9;
+        font-size: 16px;
+      }
+
+      .card-body {
+        padding: 40px;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 10px;
+        color: #4b5563;
+        font-weight: 500;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .form-group label i {
+        color: #3b82f6;
+        width: 20px;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        background: #f9fafb;
+        font-family: "Roboto", sans-serif;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: #3b82f6;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        width: 100%;
+        padding: 18px;
+        background: linear-gradient(to right, #1e40af, #3b82f6);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 17px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: "Poppins", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      .btn i {
+        font-size: 20px;
+      }
+
+      .messages-container {
+        margin-bottom: 25px;
+      }
+
+      .alert {
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: fadeIn 0.5s ease;
+        border-left: 4px solid;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .alert-success {
+        background-color: #d1fae5;
+        color: #065f46;
+        border-left-color: #10b981;
+      }
+
+      .alert-error {
+        background-color: #fee2e2;
+        color: #991b1b;
+        border-left-color: #ef4444;
+      }
+
+      .alert-warning {
+        background-color: #fef3c7;
+        color: #92400e;
+        border-left-color: #f59e0b;
+      }
+
+      .alert-info {
+        background-color: #dbeafe;
+        color: #1e40af;
+        border-left-color: #3b82f6;
+      }
+
+      .alert i {
+        font-size: 20px;
+      }
+
+      .back-link {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 25px;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .back-link a {
+        color: #6b7280;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 15px;
+        transition: color 0.3s ease;
+      }
+
+      .back-link a:hover {
+        color: #3b82f6;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 576px) {
+        .container {
+          padding: 10px;
+        }
+
+        .card {
+          border-radius: 15px;
+        }
+
+        .card-header {
+          padding: 25px 20px;
+        }
+
+        .card-header h1 {
+          font-size: 24px;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .card-body {
+          padding: 30px 25px;
+        }
+
+        .btn {
+          padding: 16px;
+        }
+      }
+
+      @media (max-width: 400px) {
+        .card-header h1 {
+          font-size: 22px;
+        }
+
+        .card-body {
+          padding: 25px 20px;
+        }
+
+        .form-control {
+          padding: 14px 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <div class="admin-badge">
+          <i class="fas fa-user-shield"></i>
+          ADMIN PANEL
+        </div>
+
+        <div class="card-header">
+          <h1>
+            <i class="fas fa-user-edit"></i>
+            Update Teacher Subject
+          </h1>
+          <p>Admin: Update teaching subject for any teacher</p>
+        </div>
+
+        <div class="card-body">
+          <!-- Messages Display -->
+          <div class="messages-container">
+            {% if messages %} {% for message in messages %}
+            <div class="alert alert-{{ message.tags|default:'info' }}">
+              {% if 'success' in message.tags %}
+              <i class="fas fa-check-circle"></i>
+              {% elif 'error' in message.tags %}
+              <i class="fas fa-exclamation-circle"></i>
+              {% elif 'warning' in message.tags %}
+              <i class="fas fa-exclamation-triangle"></i>
+              {% else %}
+              <i class="fas fa-info-circle"></i>
+              {% endif %}
+              <span>{{ message }}</span>
+            </div>
+            {% endfor %} {% endif %}
+          </div>
+
+          <!-- Update Teacher Form -->
+          <form method="POST" action="">
+            {% csrf_token %}
+
+            <div class="form-group">
+              <label>
+                <i class="fas fa-envelope"></i>
+                Teacher's Email Address
+              </label>
+              <input
+                type="email"
+                name="email"
+                class="form-control"
+                placeholder="teacher@school.edu"
+                required
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>
+                <i class="fas fa-book-open"></i>
+                New Teaching Subject
+              </label>
+              <input
+                type="text"
+                name="subject"
+                class="form-control"
+                placeholder="e.g., Mathematics, Physics, English"
+                required
+                autocomplete="off"
+              />
+            </div>
+
+            <button type="submit" class="btn">
+              <i class="fas fa-save"></i>
+              Update Teacher Subject
+            </button>
+          </form>
+
+          <div class="back-link">
+            <a href="{% url 'profile' %}">
+              <i class="fas fa-arrow-left"></i>
+              Return to Admin Dashboard
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Simple form submission feedback
+        const form = document.querySelector("form");
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        form.addEventListener("submit", function () {
+          const originalContent = submitBtn.innerHTML;
+          submitBtn.innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Updating...';
+          submitBtn.disabled = true;
+
+          // Re-enable after 5 seconds in case of error
+          setTimeout(() => {
+            submitBtn.innerHTML = originalContent;
+            submitBtn.disabled = false;
+          }, 5000);
+        });
+
+        // Auto-hide messages after 5 seconds
+        const messages = document.querySelectorAll(".alert");
+        messages.forEach((message) => {
+          setTimeout(() => {
+            message.style.transition = "opacity 0.5s ease";
+            message.style.opacity = "0";
+            setTimeout(() => {
+              message.style.display = "none";
+            }, 500);
+          }, 5000);
+        });
+      });
+    </script>
+  </body>
+</html>

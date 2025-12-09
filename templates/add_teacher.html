@@ -3,120 +3,677 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Add Teacher</title>
-    <link rel="stylesheet" href="{% static 'form.css' %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add New Teacher • School Management</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      body {
-        background: #f5f7fa;
+      :root {
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+        --primary-light: #e0e7ff;
+        --secondary: #7c3aed;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --light: #f8fafc;
+        --dark: #1e293b;
+        --gray: #64748b;
+        --gray-light: #e2e8f0;
+        --border-radius: 16px;
+        --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        --shadow-hover: 0 20px 60px rgba(79, 70, 229, 0.15);
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      * {
         margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%);
+        color: var(--dark);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         padding: 20px;
-        font-family: Arial, sans-serif;
+        position: relative;
+        overflow-x: hidden;
       }
 
+      /* Background Decorative Elements */
+      .bg-decoration {
+        position: absolute;
+        z-index: -1;
+        opacity: 0.05;
+      }
+
+      .bg-1 {
+        top: 10%;
+        right: 10%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+        border-radius: 50%;
+      }
+
+      .bg-2 {
+        bottom: 10%;
+        left: 10%;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(
+          circle,
+          var(--secondary) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+      }
+
+      /* Main Container */
       .container {
-        max-width: 450px;
-        margin: auto;
-        background: #ffffff;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-      }
-
-      h2 {
-        text-align: center;
-        color: #333;
-        margin-bottom: 25px;
-      }
-
-      label {
-        font-weight: bold;
-        display: block;
-        margin-bottom: 6px;
-        color: #444;
-      }
-
-      input,
-      select {
         width: 100%;
-        padding: 12px;
-        margin-bottom: 18px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        font-size: 15px;
+        max-width: 500px;
+        animation: slideUp 0.6s ease-out;
       }
 
-      input:focus,
-      select:focus {
-        border-color: #007bff;
-        outline: none;
-        box-shadow: 0 0 3px rgba(0, 123, 255, 0.4);
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
-      .btn {
-        width: 100%;
-        padding: 12px;
-        background: #007bff;
+      /* Header Card */
+      .header-card {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
         color: white;
+        padding: 30px;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header-card::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+      }
+
+      .header-card::after {
+        content: "";
+        position: absolute;
+        bottom: -30%;
+        left: -30%;
+        width: 150px;
+        height: 150px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+      }
+
+      .header-icon {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .header-icon i {
+        font-size: 36px;
+      }
+
+      h1 {
+        font-family: "Poppins", sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .subtitle {
         font-size: 16px;
-        border-radius: 6px;
-        border: none;
-        cursor: pointer;
-        text-align: center;
-        display: block;
-        margin-top: 10px;
-        text-decoration: none;
+        opacity: 0.9;
+        max-width: 400px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
       }
 
-      .btn:hover {
-        background: #0056c7;
+      /* Form Card */
+      .form-card {
+        background: white;
+        padding: 40px;
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+        box-shadow: var(--shadow);
+        transform: translateY(-2px);
       }
 
-      .back {
-        margin-top: 15px;
-        text-align: center;
-        display: block;
-        color: #333;
+      /* Form Elements */
+      .form-group {
+        margin-bottom: 30px;
+        position: relative;
+      }
+
+      .form-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 12px;
         font-size: 15px;
+      }
+
+      .form-label i {
+        color: var(--primary);
+        font-size: 18px;
+        width: 24px;
+      }
+
+      .input-wrapper {
+        position: relative;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 18px 20px 18px 50px;
+        border: 2px solid var(--gray-light);
+        border-radius: 12px;
+        font-size: 16px;
+        font-family: "Inter", sans-serif;
+        background: var(--light);
+        transition: var(--transition);
+        color: var(--dark);
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 4px var(--primary-light);
+      }
+
+      .form-input::placeholder {
+        color: #94a3b8;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray);
+        font-size: 18px;
+        transition: var(--transition);
+      }
+
+      .form-input:focus + .input-icon {
+        color: var(--primary);
+      }
+
+      /* Subject Suggestions */
+      .suggestions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .suggestion-tag {
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+        border: 1px solid transparent;
+      }
+
+      .suggestion-tag:hover {
+        background: var(--primary);
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      /* Submit Button */
+      .btn-submit {
+        width: 100%;
+        padding: 20px;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 17px;
+        font-weight: 600;
+        font-family: "Poppins", sans-serif;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 10px;
+        letter-spacing: 0.5px;
+        box-shadow: 0 6px 20px rgba(79, 70, 229, 0.3);
+      }
+
+      .btn-submit:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .btn-submit:active {
+        transform: translateY(-1px);
+      }
+
+      .btn-submit i {
+        font-size: 20px;
+      }
+
+      /* Back Link */
+      .back-link {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 25px;
+        border-top: 1px solid var(--gray-light);
+      }
+
+      .back-link a {
+        color: var(--gray);
         text-decoration: none;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: var(--transition);
       }
 
-      .back:hover {
-        text-decoration: underline;
+      .back-link a:hover {
+        color: var(--primary);
+        background: var(--primary-light);
       }
 
-      /* Mobile responsive */
-      @media (max-width: 600px) {
+      .back-link a i {
+        font-size: 14px;
+      }
+
+      /* Form Validation Styles */
+      .form-input.error {
+        border-color: var(--danger);
+        background: #fef2f2;
+      }
+
+      .error-message {
+        color: var(--danger);
+        font-size: 14px;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        display: none;
+      }
+
+      .error-message.show {
+        display: flex;
+      }
+
+      /* Success Animation */
+      @keyframes successPulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .success {
+        animation: successPulse 0.6s ease;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 640px) {
         .container {
+          max-width: 100%;
+        }
+
+        .header-card {
+          padding: 25px 20px;
+        }
+
+        .header-icon {
+          width: 70px;
+          height: 70px;
+        }
+
+        .header-icon i {
+          font-size: 32px;
+        }
+
+        h1 {
+          font-size: 24px;
+        }
+
+        .form-card {
+          padding: 30px 25px;
+        }
+
+        .form-input {
+          padding: 16px 16px 16px 48px;
+        }
+
+        .btn-submit {
           padding: 18px;
         }
-        h2 {
+      }
+
+      @media (max-width: 480px) {
+        body {
+          padding: 15px;
+        }
+
+        h1 {
           font-size: 22px;
+        }
+
+        .subtitle {
+          font-size: 14px;
+        }
+
+        .form-card {
+          padding: 25px 20px;
+        }
+
+        .form-input {
+          padding: 15px 15px 15px 45px;
+          font-size: 15px;
+        }
+
+        .input-icon {
+          left: 15px;
+        }
+
+        .suggestions {
+          gap: 8px;
+        }
+
+        .suggestion-tag {
+          padding: 6px 14px;
+          font-size: 13px;
+        }
+      }
+
+      /* Loading State */
+      .btn-submit.loading {
+        position: relative;
+        color: transparent;
+      }
+
+      .btn-submit.loading::after {
+        content: "";
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        border: 3px solid white;
+        border-radius: 50%;
+        border-top-color: transparent;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
         }
       }
     </style>
   </head>
 
   <body>
+    <!-- Background Decorations -->
+    <div class="bg-decoration bg-1"></div>
+    <div class="bg-decoration bg-2"></div>
+
     <div class="container">
-      <h2>Add Teacher</h2>
+      <!-- Header Section -->
+      <div class="header-card">
+        <div class="header-icon">
+          <i class="fas fa-chalkboard-teacher"></i>
+        </div>
+        <h1>Add New Teacher</h1>
+        <p class="subtitle">
+          Register a new teacher account and assign their teaching subject
+        </p>
+      </div>
 
-      <form method="POST">
-        {% csrf_token %}
+      <!-- Form Section -->
+      <div class="form-card">
+        <form method="POST" id="addTeacherForm">
+          {% csrf_token %}
 
-        <label>Email</label>
-        <input type="email" name="email" placeholder="Enter teacher's email" />
+          <!-- Email Field -->
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-envelope"></i>
+              Teacher's Email Address
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="email"
+                name="email"
+                class="form-input"
+                placeholder="teacher@school.edu"
+                required
+                autocomplete="off"
+              />
+              <div class="input-icon">
+                <i class="fas fa-at"></i>
+              </div>
+            </div>
+            <div class="error-message" id="emailError">
+              <i class="fas fa-exclamation-circle"></i>
+              Please enter a valid email address
+            </div>
+          </div>
 
-        <label>Subject</label>
-        <input
-          type="text"
-          name="subject"
-          placeholder="Enter subject e.g. Mathematics"
-        />
+          <!-- Subject Field -->
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-book-open"></i>
+              Teaching Subject
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="text"
+                name="subject"
+                class="form-input"
+                placeholder="e.g., Mathematics, Physics, English"
+                required
+                autocomplete="off"
+                id="subjectInput"
+              />
+              <div class="input-icon">
+                <i class="fas fa-graduation-cap"></i>
+              </div>
+            </div>
 
-        <button class="btn">Add Teacher</button>
-      </form>
+            <!-- Subject Suggestions -->
+            <div class="suggestions">
+              <div class="suggestion-tag" data-subject="Mathematics">
+                Mathematics
+              </div>
+              <div class="suggestion-tag" data-subject="Physics">Physics</div>
+              <div class="suggestion-tag" data-subject="Chemistry">
+                Chemistry
+              </div>
+              <div class="suggestion-tag" data-subject="Biology">Biology</div>
+              <div class="suggestion-tag" data-subject="English">English</div>
+              <div class="suggestion-tag" data-subject="History">History</div>
+            </div>
 
-      <a href="{% url 'profile' %}" class="back">← Back to Profile</a>
+            <div class="error-message" id="subjectError">
+              <i class="fas fa-exclamation-circle"></i>
+              Please enter a teaching subject
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <i class="fas fa-user-plus"></i>
+            Add Teacher
+          </button>
+        </form>
+
+        <!-- Back Link -->
+        <div class="back-link">
+          <a href="{% url 'profile' %}">
+            <i class="fas fa-arrow-left"></i>
+            Back to Dashboard
+          </a>
+        </div>
+      </div>
     </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("addTeacherForm");
+        const submitBtn = document.getElementById("submitBtn");
+        const emailInput = document.querySelector('input[name="email"]');
+        const subjectInput = document.getElementById("subjectInput");
+        const emailError = document.getElementById("emailError");
+        const subjectError = document.getElementById("subjectError");
+
+        // Subject suggestion tags
+        const suggestionTags = document.querySelectorAll(".suggestion-tag");
+        suggestionTags.forEach((tag) => {
+          tag.addEventListener("click", function () {
+            subjectInput.value = this.getAttribute("data-subject");
+            subjectInput.focus();
+            highlightSuggestion(this);
+          });
+        });
+
+        function highlightSuggestion(selectedTag) {
+          suggestionTags.forEach((tag) => {
+            tag.style.background =
+              tag === selectedTag ? "var(--primary)" : "var(--primary-light)";
+            tag.style.color =
+              tag === selectedTag ? "white" : "var(--primary-dark)";
+          });
+        }
+
+        // Form validation
+        function validateEmail(email) {
+          const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return re.test(email);
+        }
+
+        emailInput.addEventListener("blur", function () {
+          if (!validateEmail(this.value)) {
+            this.classList.add("error");
+            emailError.classList.add("show");
+          } else {
+            this.classList.remove("error");
+            emailError.classList.remove("show");
+          }
+        });
+
+        subjectInput.addEventListener("blur", function () {
+          if (!this.value.trim()) {
+            this.classList.add("error");
+            subjectError.classList.add("show");
+          } else {
+            this.classList.remove("error");
+            subjectError.classList.remove("show");
+          }
+        });
+
+        // Form submission
+        form.addEventListener("submit", function (e) {
+          let isValid = true;
+
+          // Validate email
+          if (!validateEmail(emailInput.value)) {
+            emailInput.classList.add("error");
+            emailError.classList.add("show");
+            isValid = false;
+          }
+
+          // Validate subject
+          if (!subjectInput.value.trim()) {
+            subjectInput.classList.add("error");
+            subjectError.classList.add("show");
+            isValid = false;
+          }
+
+          if (!isValid) {
+            e.preventDefault();
+            submitBtn.classList.add("error");
+            setTimeout(() => submitBtn.classList.remove("error"), 300);
+            return;
+          }
+
+          // Show loading state
+          submitBtn.classList.add("loading");
+          submitBtn.disabled = true;
+
+          // Add success animation
+          setTimeout(() => {
+            submitBtn.classList.remove("loading");
+            submitBtn.classList.add("success");
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> Teacher Added!';
+          }, 1500);
+        });
+
+        // Input focus effects
+        const inputs = document.querySelectorAll(".form-input");
+        inputs.forEach((input) => {
+          input.addEventListener("focus", function () {
+            this.parentElement.parentElement.classList.add("focused");
+          });
+
+          input.addEventListener("blur", function () {
+            this.parentElement.parentElement.classList.remove("focused");
+          });
+        });
+
+        // Auto-focus first input
+        emailInput.focus();
+      });
+    </script>
   </body>
 </html>

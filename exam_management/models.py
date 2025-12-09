@@ -27,3 +27,8 @@ class Teacher(models.Model):
   subject = models.CharField(max_length=230)
   is_active = models.BooleanField(default=True)
   date_added = models.DateField(auto_now=True)
+
+class Student(models.Model):
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+  is_active = models.BooleanField(default=True)
+  date_added = models.DateField(default=True)

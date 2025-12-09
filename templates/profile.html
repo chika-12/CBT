@@ -4,550 +4,1036 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ profile.name }}'s Profile - Karmo Development Center</title>
+    <title>{{ profile.name }}'s Profile • Karmo Development Center</title>
     <link rel="stylesheet" href="{% static 'css/profile.css' %}" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <style>
+      :root {
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+        --primary-light: #e0e7ff;
+        --secondary: #7c3aed;
+        --success: #10b981;
+        --success-light: #d1fae5;
+        --warning: #f59e0b;
+        --warning-light: #fef3c7;
+        --danger: #ef4444;
+        --danger-light: #fee2e2;
+        --light: #f8fafc;
+        --dark: #1e293b;
+        --gray: #64748b;
+        --gray-light: #e2e8f0;
+        --border-radius: 20px;
+        --shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        --shadow-hover: 0 30px 80px rgba(79, 70, 229, 0.25);
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --glass: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.2);
+      }
+
       * {
+        margin: 0;
+        padding: 0;
         box-sizing: border-box;
       }
 
       body {
-        margin: 0;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f0f4f8;
-        color: #333;
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%);
+        color: var(--dark);
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
       }
 
-      /* Top Header */
-      .top-header {
+      /* Background Effects */
+      .bg-effects {
+        position: fixed;
+        top: 0;
+        left: 0;
         width: 100%;
-        background: #2575fc;
-        color: #fff;
-        padding: 25px 20px;
-        text-align: center;
-      }
-      .top-header h1 {
-        margin: 0;
-        font-size: 2.2rem;
-        letter-spacing: 1px;
-      }
-      .top-header p {
-        margin-top: 8px;
-        font-size: 1rem;
-        opacity: 0.9;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
       }
 
-      /* Profile Container */
-      .profile-container {
-        background-color: #fff;
-        border-radius: 20px;
-        padding: 25px 15px;
-        max-width: 850px;
-        width: 95%;
-        margin: -30px auto 50px auto;
-        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+      .effect-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          var(--primary-light) 0%,
+          transparent 70%
+        );
+        opacity: 0.3;
+        filter: blur(40px);
       }
 
-      /* Messages */
-      .messages {
-        list-style: none;
-        padding: 0;
-        margin-bottom: 20px;
-      }
-      .messages li {
-        padding: 12px;
-        border-radius: 10px;
-        margin-bottom: 10px;
-        font-weight: bold;
-        font-size: 14px;
-      }
-      .messages li.success {
-        background-color: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-      }
-      .messages li.error {
-        background-color: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
+      .circle-1 {
+        width: 400px;
+        height: 400px;
+        top: -100px;
+        right: -100px;
+        animation: float 20s infinite linear;
       }
 
-      /* Profile Header */
-      .profile-header {
+      .circle-2 {
+        width: 300px;
+        height: 300px;
+        bottom: -50px;
+        left: -50px;
+        animation: float 25s infinite linear reverse;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+        25% {
+          transform: translate(20px, 20px) rotate(90deg);
+        }
+        50% {
+          transform: translate(0, 40px) rotate(180deg);
+        }
+        75% {
+          transform: translate(-20px, 20px) rotate(270deg);
+        }
+      }
+
+      /* Main Container */
+      .main-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        animation: fadeIn 0.8s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Header Banner */
+      .header-banner {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        padding: 60px 40px;
+        border-radius: var(--border-radius);
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+
+      .header-banner::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 300px;
+        height: 300px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+      }
+
+      .header-banner::after {
+        content: "";
+        position: absolute;
+        bottom: -30%;
+        left: -30%;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+      }
+
+      .org-logo {
         display: flex;
         align-items: center;
-        gap: 20px;
-        flex-wrap: wrap;
-        margin-bottom: 25px;
+        gap: 15px;
+        margin-bottom: 30px;
+        position: relative;
+        z-index: 1;
       }
-      .avatar {
-        width: 100px;
-        height: 100px;
-        background: #2575fc;
-        color: #fff;
-        font-size: 40px;
-        font-weight: bold;
+
+      .org-logo-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.2);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        text-transform: uppercase;
-      }
-      .header-text h2 {
-        margin: 0;
-        font-size: 24px;
-      }
-      .header-text p {
-        margin-top: 4px;
-        font-size: 14px;
-        color: #555;
+        border: 2px solid rgba(255, 255, 255, 0.3);
       }
 
-      /* Profile Details */
-      .profile-details {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 12px;
-        margin-bottom: 25px;
+      .org-logo-icon i {
+        font-size: 28px;
       }
-      .detail {
-        background-color: #f7f9fc;
-        padding: 12px 15px;
-        border-radius: 15px;
-        font-size: 14px;
+
+      .org-name h1 {
+        font-family: "Poppins", sans-serif;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+
+      .org-name p {
+        font-size: 1rem;
+        opacity: 0.9;
+        max-width: 600px;
+      }
+
+      /* Profile Card */
+      .profile-card {
+        background: white;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        margin-bottom: 40px;
+        animation: slideUp 0.6s ease-out 0.2s both;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Profile Header */
+      .profile-header {
+        background: linear-gradient(to right, #667eea, #764ba2);
+        padding: 40px;
+        color: white;
         display: flex;
         align-items: center;
-        gap: 8px;
-        word-wrap: break-word;
-      }
-      .detail strong {
-        color: #2575fc;
-      }
-
-      /* Compact Icon Buttons */
-      .profile-actions,
-      .admin-buttons {
-        display: flex;
+        gap: 30px;
         flex-wrap: wrap;
-        gap: 10px;
-        justify-content: center;
-        margin-top: 25px;
-      }
-
-      .btn-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 10px 18px;
-        font-size: 14px;
-        border-radius: 25px;
-        color: #fff;
-        font-weight: 600;
-        text-decoration: none;
-        min-width: 100px;
-        transition: all 0.2s ease-in-out;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-        border: none;
-        cursor: pointer;
-      }
-
-      .btn-icon:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      }
-
-      .btn-icon i {
-        font-size: 14px;
-      }
-
-      .btn-edit {
-        background: linear-gradient(135deg, #4caf50, #45a049);
-      }
-      .btn-edit:hover {
-        background: linear-gradient(135deg, #45a049, #3d8b40);
-      }
-
-      .btn-delete {
-        background: linear-gradient(135deg, #ff4757, #ff3742);
-      }
-      .btn-delete:hover {
-        background: linear-gradient(135deg, #ff3742, #e84118);
-      }
-
-      .btn-logout {
-        background: linear-gradient(135deg, #ffa502, #e59400);
-      }
-      .btn-logout:hover {
-        background: linear-gradient(135deg, #e59400, #cc8400);
-      }
-
-      /* Compact admin buttons */
-      .admin-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 10px 16px;
-        font-size: 13px;
-        border-radius: 25px;
-        background: linear-gradient(135deg, #6c5ce7, #5b4fcf);
-        color: #fff;
-        font-weight: 600;
-        text-decoration: none;
-        min-width: 90px;
-        transition: all 0.2s ease-in-out;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-      }
-
-      .admin-btn:hover {
-        background: linear-gradient(135deg, #5b4fcf, #4a3fbc);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      }
-
-      .admin-btn i {
-        font-size: 13px;
-      }
-
-      /* Tooltip for mobile icons */
-      .mobile-tooltip {
         position: relative;
       }
 
-      .mobile-tooltip::after {
-        content: attr(title);
+      .profile-header::after {
+        content: "";
         position: absolute;
-        bottom: -35px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.8);
+        bottom: -20px;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background: white;
+        border-radius: 50% 50% 0 0;
+      }
+
+      .profile-avatar {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, #fff, #e0e7ff);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        font-weight: 700;
+        color: var(--primary);
+        border: 6px solid white;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 2;
+      }
+
+      .profile-info {
+        flex: 1;
+        position: relative;
+        z-index: 2;
+      }
+
+      .profile-info h2 {
+        font-family: "Poppins", sans-serif;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .profile-bio {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      .profile-meta {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.95rem;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 8px 16px;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+      }
+
+      .meta-item i {
+        font-size: 16px;
+      }
+
+      /* Messages */
+      .messages-container {
+        padding: 25px 40px 0;
+        animation: fadeIn 0.5s ease;
+      }
+
+      .message {
+        padding: 18px 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-weight: 500;
+        border-left: 4px solid;
+        animation: slideInRight 0.5s ease;
+      }
+
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .message.success {
+        background: var(--success-light);
+        color: #065f46;
+        border-left-color: var(--success);
+      }
+
+      .message.error {
+        background: var(--danger-light);
+        color: #991b1b;
+        border-left-color: var(--danger);
+      }
+
+      .message.info {
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        border-left-color: var(--primary);
+      }
+
+      .message i {
+        font-size: 20px;
+        flex-shrink: 0;
+      }
+
+      /* Profile Details Grid */
+      .profile-details {
+        padding: 40px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+      }
+
+      .detail-card {
+        background: var(--light);
+        border-radius: 16px;
+        padding: 25px;
+        transition: var(--transition);
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .detail-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary-light);
+        box-shadow: 0 10px 30px rgba(79, 70, 229, 0.1);
+      }
+
+      .detail-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(to right, var(--primary), var(--secondary));
+      }
+
+      .detail-icon {
+        width: 50px;
+        height: 50px;
+        background: var(--primary-light);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        color: var(--primary);
+        font-size: 22px;
+      }
+
+      .detail-content h3 {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        color: var(--gray);
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+
+      .detail-content p {
+        font-size: 1.1rem;
+        color: var(--dark);
+        font-weight: 500;
+        line-height: 1.5;
+      }
+
+      /* Action Buttons */
+      .action-section {
+        padding: 0 40px 40px;
+      }
+
+      .action-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+      }
+
+      .action-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        background: white;
+        border: 2px solid var(--gray-light);
+        border-radius: 16px;
+        padding: 25px 20px;
+        text-decoration: none;
+        color: var(--dark);
+        transition: var(--transition);
+        text-align: center;
+      }
+
+      .action-btn:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary);
+        box-shadow: 0 10px 30px rgba(79, 70, 229, 0.15);
+      }
+
+      .action-btn i {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
         color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-        font-size: 12px;
-        white-space: nowrap;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s;
-        z-index: 100;
+        transition: var(--transition);
       }
 
-      .mobile-tooltip:hover::after {
-        opacity: 1;
+      .action-btn:nth-child(1) i {
+        background: linear-gradient(135deg, var(--success), #059669);
+      }
+      .action-btn:nth-child(2) i {
+        background: linear-gradient(135deg, var(--danger), #dc2626);
+      }
+      .action-btn:nth-child(3) i {
+        background: linear-gradient(135deg, var(--warning), #d97706);
+      }
+      .action-btn:nth-child(4) i {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      }
+      .action-btn:nth-child(5) i {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
       }
 
-      /* Mobile responsive adjustments */
-      @media (max-width: 768px) {
+      .action-btn:hover i {
+        transform: scale(1.1);
+      }
+
+      .action-btn span {
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+      /* Admin Dashboard */
+      .admin-dashboard {
+        background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+        border-radius: var(--border-radius);
+        padding: 40px;
+        margin-top: 40px;
+        border: 2px solid var(--primary-light);
+        animation: slideUp 0.6s ease-out 0.4s both;
+      }
+
+      .dashboard-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+      }
+
+      .dashboard-header i {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+      }
+
+      .dashboard-header h3 {
+        font-family: "Poppins", sans-serif;
+        font-size: 1.8rem;
+        color: var(--dark);
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+      }
+
+      .dashboard-card {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        text-decoration: none;
+        color: var(--dark);
+        transition: var(--transition);
+        border: 2px solid transparent;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .dashboard-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary);
+        box-shadow: 0 15px 40px rgba(79, 70, 229, 0.15);
+      }
+
+      .dashboard-card i {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: white;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+      }
+
+      .dashboard-card span {
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+
+      /* Badge for Admin */
+      .admin-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 3;
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 1024px) {
+        .main-container {
+          padding: 15px;
+        }
+
         .profile-header {
+          padding: 30px;
           flex-direction: column;
-          align-items: center;
           text-align: center;
         }
 
+        .profile-avatar {
+          width: 100px;
+          height: 100px;
+          font-size: 40px;
+        }
+
+        .profile-info h2 {
+          font-size: 1.8rem;
+        }
+
+        .profile-meta {
+          justify-content: center;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .header-banner {
+          padding: 40px 25px;
+        }
+
+        .org-name h1 {
+          font-size: 1.8rem;
+        }
+
         .profile-details {
+          padding: 30px 25px;
           grid-template-columns: 1fr;
         }
 
-        .avatar {
-          width: 90px;
-          height: 90px;
-          font-size: 36px;
+        .action-section,
+        .messages-container {
+          padding: 30px 25px;
         }
 
-        .header-text h2 {
-          font-size: 22px;
+        .action-grid {
+          grid-template-columns: repeat(2, 1fr);
         }
 
-        /* Stack buttons vertically on very small screens */
-        @media (max-width: 480px) {
-          .profile-actions,
-          .admin-buttons {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 12px;
-          }
-
-          .btn-icon,
-          .admin-btn {
-            width: 100%;
-            justify-content: center;
-            padding: 12px;
-            border-radius: 15px;
-            min-width: auto;
-          }
-
-          .btn-icon i,
-          .admin-btn i {
-            font-size: 15px;
-          }
+        .dashboard-grid {
+          grid-template-columns: repeat(2, 1fr);
         }
 
-        /* For medium mobile screens, keep buttons horizontal but smaller */
-        @media (min-width: 481px) and (max-width: 768px) {
-          .btn-icon,
-          .admin-btn {
-            min-width: 80px;
-            padding: 8px 14px;
-            font-size: 13px;
-          }
-
-          .btn-icon span,
-          .admin-btn span {
-            font-size: 12px;
-          }
+        .admin-dashboard {
+          padding: 30px 25px;
         }
       }
 
-      /* For very small screens (like iPhone SE), show tooltips */
-      @media (max-width: 375px) {
-        .btn-icon span,
-        .admin-btn span {
-          display: inline;
+      @media (max-width: 576px) {
+        .header-banner {
+          padding: 30px 20px;
         }
 
-        /* Add tooltip as backup */
-        .btn-icon,
-        .admin-btn {
-          position: relative;
-        }
-
-        .btn-icon:hover::before,
-        .admin-btn:hover::before {
-          content: attr(data-tooltip);
-          position: absolute;
-          bottom: -35px;
-          left: 50%;
-          transform: translateX(-50%);
-          background: rgba(0, 0, 0, 0.8);
-          color: white;
-          padding: 5px 10px;
-          border-radius: 5px;
-          font-size: 12px;
-          white-space: nowrap;
-          z-index: 100;
-        }
-      }
-
-      /* Extra small screens - always show text but smaller */
-      @media (max-width: 320px) {
-        .profile-actions,
-        .admin-buttons {
+        .org-logo {
           flex-direction: column;
-          align-items: stretch;
+          text-align: center;
+          gap: 10px;
         }
 
-        .btn-icon,
-        .admin-btn {
-          width: 100%;
-          padding: 10px;
-          font-size: 12px;
+        .org-name h1 {
+          font-size: 1.6rem;
         }
 
-        .btn-icon i,
-        .admin-btn i {
-          font-size: 14px;
-          min-width: 20px;
+        .profile-header {
+          padding: 25px 20px;
         }
 
-        .btn-icon span,
-        .admin-btn span {
-          display: inline !important;
-          font-size: 12px;
+        .profile-avatar {
+          width: 80px;
+          height: 80px;
+          font-size: 32px;
+        }
+
+        .action-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .admin-badge {
+          top: 10px;
+          right: 10px;
+          font-size: 0.8rem;
+          padding: 6px 15px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .profile-details {
+          padding: 25px 20px;
+          gap: 15px;
+        }
+
+        .detail-card {
+          padding: 20px;
+        }
+
+        .action-section {
+          padding: 25px 20px;
+        }
+
+        .action-btn {
+          padding: 20px 15px;
+        }
+
+        .dashboard-header {
+          flex-direction: column;
+          text-align: center;
+          gap: 10px;
+        }
+
+        .dashboard-header h3 {
+          font-size: 1.5rem;
+        }
+      }
+
+      /* Status Indicator */
+      .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--success-light);
+        color: #065f46;
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-top: 10px;
+        display: inline-flex;
+      }
+
+      .status-indicator::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        background: var(--success);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
         }
       }
     </style>
   </head>
   <body>
-    <div class="top-header">
-      <h1>Karmo Development Center</h1>
-      <p>
-        Empowering street children with knowledge and skills to reach their full
-        potential.
-      </p>
+    <!-- Background Effects -->
+    <div class="bg-effects">
+      <div class="effect-circle circle-1"></div>
+      <div class="effect-circle circle-2"></div>
     </div>
 
-    <div class="profile-container">
-      {% if messages %}
-      <ul class="messages">
-        {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-      </ul>
-      {% endif %}
-
-      <div class="profile-header">
-        <div class="avatar">{{ profile.name|first|upper }}</div>
-        <div class="header-text">
-          <h2>{{ profile.name }}</h2>
-          <p>{{ profile.bio }}</p>
+    <div class="main-container">
+      <!-- Organization Header -->
+      <div class="header-banner">
+        <div class="org-logo">
+          <div class="org-logo-icon">
+            <i class="fas fa-hands-helping"></i>
+          </div>
+          <div class="org-name">
+            <h1>Karmo Development Center</h1>
+            <p>
+              Empowering street children with knowledge and skills to reach
+              their full potential.
+            </p>
+          </div>
         </div>
       </div>
 
-      <div class="profile-details">
-        <div class="detail">
-          <strong>School:</strong> {{ profile.name_of_School }}
+      <!-- Profile Card -->
+      <div class="profile-card">
+        <!-- Profile Header -->
+        <div class="profile-header">
+          {% if profile.role == "admin" %}
+          <div class="admin-badge">
+            <i class="fas fa-crown"></i>
+            Administrator
+          </div>
+          {% endif %}
+
+          <div class="profile-avatar">{{ profile.name|first|upper }}</div>
+
+          <div class="profile-info">
+            <h2>{{ profile.name }}</h2>
+            <p class="profile-bio">
+              {{ profile.bio|default:"Welcome to your profile dashboard!" }}
+            </p>
+
+            <div class="profile-meta">
+              <div class="meta-item">
+                <i class="fas fa-user-check"></i>
+                <span>{{ profile.role|title }}</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Joined {{ profile.date_added|date:"F Y" }}</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-circle"></i>
+                <span>Active Now</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="detail"><strong>State:</strong> {{ profile.state }}</div>
-        <div class="detail"><strong>City:</strong> {{ profile.city }}</div>
-        <div class="detail">
-          <strong>Address:</strong> {{ profile.address }}
+
+        <!-- Messages -->
+        {% if messages %}
+        <div class="messages-container">
+          {% for message in messages %}
+          <div class="message {{ message.tags }}">
+            {% if message.tags == 'success' %}
+            <i class="fas fa-check-circle"></i>
+            {% elif message.tags == 'error' %}
+            <i class="fas fa-exclamation-circle"></i>
+            {% else %}
+            <i class="fas fa-info-circle"></i>
+            {% endif %}
+            <span>{{ message }}</span>
+          </div>
+          {% endfor %}
         </div>
-        <div class="detail">
-          <strong>Joined:</strong> {{ profile.date_added }}
+        {% endif %}
+
+        <!-- Profile Details -->
+        <div class="profile-details">
+          <div class="detail-card">
+            <div class="detail-icon">
+              <i class="fas fa-school"></i>
+            </div>
+            <div class="detail-content">
+              <h3>School / Organization</h3>
+              <p>{{ profile.name_of_School }}</p>
+            </div>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="detail-content">
+              <h3>Location</h3>
+              <p>{{ profile.city }}, {{ profile.state }}</p>
+            </div>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-icon">
+              <i class="fas fa-home"></i>
+            </div>
+            <div class="detail-content">
+              <h3>Address</h3>
+              <p>{{ profile.address }}</p>
+            </div>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-icon">
+              <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="detail-content">
+              <h3>Member Since</h3>
+              <p>{{ profile.date_added }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-section">
+          <div class="action-grid">
+            <a href="{% url 'edit_profile' %}" class="action-btn">
+              <i class="fas fa-edit"></i>
+              <span>Edit Profile</span>
+            </a>
+            <a href="{% url 'delete' %}" class="action-btn">
+              <i class="fas fa-trash-alt"></i>
+              <span>Delete Account</span>
+            </a>
+            <a href="{% url 'logout' %}" class="action-btn">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </div>
         </div>
       </div>
 
-      <div class="profile-actions">
-        <a
-          href="{% url 'edit_profile' %}"
-          class="btn-icon btn-edit"
-          data-tooltip="Edit Profile"
-        >
-          <i class="fas fa-edit"></i>
-          <span>Edit</span>
-        </a>
-        <a
-          href="{% url 'delete' %}"
-          class="btn-icon btn-delete"
-          data-tooltip="Delete Account"
-        >
-          <i class="fas fa-trash-alt"></i>
-          <span>Delete</span>
-        </a>
-        <a
-          href="{% url 'logout' %}"
-          class="btn-icon btn-logout"
-          data-tooltip="Logout"
-        >
-          <i class="fas fa-sign-out-alt"></i>
-          <span>Logout</span>
-        </a>
-      </div>
-
+      <!-- Admin Dashboard (Only for Admin Users) -->
       {% if profile.role == "admin" %}
-      <div class="admin-buttons">
-        <a
-          href="{% url 'login_history' %}"
-          class="admin-btn"
-          data-tooltip="Login History"
-        >
-          <i class="fas fa-history"></i>
-          <span>History</span>
-        </a>
-        <a
-          href="{% url 'add_teacher' %}"
-          class="admin-btn"
-          data-tooltip="Add Teacher"
-        >
-          <i class="fas fa-user-plus"></i>
-          <span>Add</span>
-        </a>
-        <a
-          href="{% url 'remove_teacher' %}"
-          class="admin-btn"
-          data-tooltip="Remove Teacher"
-        >
-          <i class="fas fa-user-minus"></i>
-          <span>Remove</span>
-        </a>
-        <a
-          href="{% url 'all_teachers' %}"
-          class="admin-btn"
-          data-tooltip="All Teachers"
-        >
-          <i class="fas fa-users"></i>
-          <span>All Teachers</span>
-        </a>
+      <div class="admin-dashboard">
+        <div class="dashboard-header">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <h3>Administrator Dashboard</h3>
+        </div>
+
+        <div class="dashboard-grid">
+          <a href="{% url 'login_history' %}" class="dashboard-card">
+            <i class="fas fa-history"></i>
+            <span>Login History</span>
+          </a>
+          <a href="{% url 'update_teacher' %}" class="dashboard-card">
+            <i class="fas fa-user-edit"></i>
+            <span>Update Teacher</span>
+          </a>
+          <a href="{% url 'add_teacher' %}" class="dashboard-card">
+            <i class="fas fa-user-plus"></i>
+            <span>Add Teacher</span>
+          </a>
+          <a href="{% url 'remove_teacher' %}" class="dashboard-card">
+            <i class="fas fa-user-minus"></i>
+            <span>Remove Teacher</span>
+          </a>
+          <a href="{% url 'all_teachers' %}" class="dashboard-card">
+            <i class="fas fa-users"></i>
+            <span>All Teachers</span>
+          </a>
+        </div>
       </div>
       {% endif %}
     </div>
 
     <script>
-      // Add touch tooltips for mobile
-      document.addEventListener("DOMContentLoaded", function () {
-        let touchTimer;
+      document.addEventListener('DOMContentLoaded', function() {
+          // Add animation to profile card on load
+          const profileCard = document.querySelector('.profile-card');
+          if (profileCard) {
+              profileCard.style.animation = 'slideUp 0.6s ease-out 0.2s both';
+          }
 
-        // For mobile touch devices
-        if ("ontouchstart" in window) {
-          const buttons = document.querySelectorAll(".btn-icon, .admin-btn");
+          // Add hover effects to dashboard cards
+          const dashboardCards = document.querySelectorAll('.dashboard-card, .action-btn');
+          dashboardCards.forEach(card => {
+              card.addEventListener('mouseenter', function() {
+                  this.style.transform = 'translateY(-5px)';
+              });
 
-          buttons.forEach((button) => {
-            button.addEventListener("touchstart", function (e) {
-              e.preventDefault();
-              const tooltip = this.getAttribute("data-tooltip");
+              card.addEventListener('mouseleave', function() {
+                  this.style.transform = 'translateY(0)';
+              });
+          });
 
-              // Show temporary tooltip
-              if (tooltip) {
-                const tooltipEl = document.createElement("div");
-                tooltipEl.className = "mobile-tooltip-active";
-                tooltipEl.textContent = tooltip;
-                tooltipEl.style.cssText = `
-                  position: fixed;
-                  bottom: 20px;
-                  left: 50%;
-                  transform: translateX(-50%);
-                  background: rgba(0, 0, 0, 0.85);
-                  color: white;
-                  padding: 8px 15px;
-                  border-radius: 10px;
-                  font-size: 14px;
-                  z-index: 1000;
-                  white-space: nowrap;
-                  pointer-events: none;
-                  animation: fadeInOut 2s forwards;
-                `;
+          // Auto-hide messages after 5 seconds
+          const messages = document.querySelectorAll('.message');
+          messages.forEach((message, index) => {
+              setTimeout(() => {
+                  message.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                  message.style.opacity = '0';
+                  message.style.transform = 'translateX(-20px)';
 
-                // Remove existing tooltips
-                document
-                  .querySelectorAll(".mobile-tooltip-active")
-                  .forEach((el) => el.remove());
+                  setTimeout(() => {
+                      message.style.display = 'none';
+                  }, 500);
+              }, 5000 + (index * 500));
+          });
 
-                document.body.appendChild(tooltipEl);
+          // Add loading animation to buttons on click
+          const actionButtons = document.querySelectorAll('.action-btn, .dashboard-card');
+          actionButtons.forEach(btn => {
+              btn.addEventListener('click', function(e) {
+                  if (!this.getAttribute('href').includes('logout')) {
+                      // Show loading state for non-logout actions
+                      const originalContent = this.innerHTML;
+                      this.innerHTML = `
+                          <div style="display: flex; align-items: center; gap: 10px;">
+                              <div style="width: 20px; height: 20px; border: 2px solid white; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                              <span>Loading...</span>
+                          </div>
+                      `;
+                      this.style.pointerEvents = 'none';
 
-                // Auto-remove after 2 seconds
-                setTimeout(() => {
-                  if (tooltipEl.parentNode) {
-                    tooltipEl.remove();
+                      setTimeout(() => {
+                          this.innerHTML = originalContent;
+                          this.style.pointerEvents = 'auto';
+                      }, 1500);
                   }
-                }, 2000);
+              });
+          });
+
+          // Add keyboard shortcuts
+          document.addEventListener('keydown', function(e) {
+              // Ctrl+E for Edit Profile
+              if (e.ctrlKey && e.key === 'e') {
+                  e.preventDefault();
+                  document.querySelector('[href="{% url 'edit_profile' %}"]').click();
               }
 
-              // Navigate after a short delay (to show tooltip first)
-              touchTimer = setTimeout(() => {
-                window.location.href = this.href;
-              }, 300);
-            });
-
-            button.addEventListener("touchend", function (e) {
-              clearTimeout(touchTimer);
-            });
+              // Ctrl+Q for Logout
+              if (e.ctrlKey && e.key === 'q') {
+                  e.preventDefault();
+                  document.querySelector('[href="{% url 'logout' %}"]').click();
+              }
           });
-        }
+
+          // Add active status indicator animation
+          const statusIndicator = document.createElement('div');
+          statusIndicator.className = 'status-indicator';
+          statusIndicator.innerHTML = '<span>Online</span>';
+
+          const profileMeta = document.querySelector('.profile-meta');
+          if (profileMeta) {
+              profileMeta.appendChild(statusIndicator);
+          }
+
+          // Add smooth scroll for any anchor links
+          document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+              anchor.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  const targetId = this.getAttribute('href');
+                  if (targetId === '#') return;
+
+                  const targetElement = document.querySelector(targetId);
+                  if (targetElement) {
+                      window.scrollTo({
+                          top: targetElement.offsetTop - 20,
+                          behavior: 'smooth'
+                      });
+                  }
+              });
+          });
+
+          // Initialize tooltips
+          const tooltipElements = document.querySelectorAll('.dashboard-card, .action-btn');
+          tooltipElements.forEach(el => {
+              el.addEventListener('mouseenter', function() {
+                  const title = this.querySelector('span').textContent;
+                  this.setAttribute('title', title);
+              });
+          });
       });
     </script>
 
     <style>
-      @keyframes fadeInOut {
-        0% {
-          opacity: 0;
-          transform: translateX(-50%) translateY(10px);
-        }
-        20% {
-          opacity: 1;
-          transform: translateX(-50%) translateY(0);
-        }
-        80% {
-          opacity: 1;
-          transform: translateX(-50%) translateY(0);
-        }
-        100% {
-          opacity: 0;
-          transform: translateX(-50%) translateY(-10px);
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
         }
       }
     </style>
