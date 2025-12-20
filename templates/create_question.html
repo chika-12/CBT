@@ -2,10 +2,22 @@
 
 {% block title %}{% if question %}Edit Question{% else %}Add Question{% endif %}{% endblock %}
 {% block page_title %}{% if question %}Edit Question{% else %}Add New Question{% endif %}{% endblock %}
-{% block page_subtitle %}{% if question %}Update question details{% else %}Add a question to {{ test.subject }}{% endif %}{% endblock %}
+{% block page_subtitle %}
+    {% if question %}
+        Update question details
+    {% else %}
+        Add a question to {{ test.subject }}
+    {% endif %}
+{% endblock %}
 
 {% block header_actions %}
-    <a href="{% url 'question_list' test.id|default:question.test.id %}" class="btn btn-outline-secondary">
+    {% if test %}
+        <a href="{% url 'question_list' test.id %}" class="btn btn-outline-secondary">
+    {% elif question and question.test %}
+        <a href="{% url 'question_list' question.test.id %}" class="btn btn-outline-secondary">
+    {% else %}
+        <a href="#" class="btn btn-outline-secondary disabled">
+    {% endif %}
         <i class="bi bi-arrow-left"></i> Back to Questions
     </a>
 {% endblock %}
@@ -61,7 +73,13 @@
                     </div>
 
                     <div class="d-flex justify-content-between">
-                        <a href="{% url 'question_list' test.id|default:question.test.id %}" class="btn btn-outline-secondary">
+                        {% if test %}
+                            <a href="{% url 'question_list' test.id %}" class="btn btn-outline-secondary">
+                        {% elif question and question.test %}
+                            <a href="{% url 'question_list' question.test.id %}" class="btn btn-outline-secondary">
+                        {% else %}
+                            <a href="#" class="btn btn-outline-secondary disabled">
+                        {% endif %}
                             Cancel
                         </a>
                         <button type="submit" class="btn btn-primary">

@@ -28,22 +28,22 @@ urlpatterns = [
   path('tests/<str:test_id>/questions/create/', views.question_create, name='question_create'),
    
   # Update question
-  path('questions/<int:question_id>/update/', views.question_update, name='question_update'),
+  path('questions/<str:question_id>/update/', views.question_update, name='question_update'),
     
   # Delete question
-  path('questions/<int:question_id>/delete/', views.question_delete, name='question_delete'),
+  path('questions/<str:question_id>/delete/', views.question_delete, name='question_delete'),
     
     
   # =============== CHOICE MANAGEMENT ===============
   # List choices for a question
-  path('questions/<int:question_id>/choices/', views.choice_list, name='choice_list'),
+  path('questions/<str:question_id>/choices/', views.choice_list, name='choice_list'),
     
   # Create choice for a question
-  path('questions/<int:question_id>/choices/create/', views.choice_create, name='choice_create'),
+  path('questions/<str:question_id>/choices/create/', views.choice_create, name='choice_create'),
     
   # Update choice
-  path('choices/<int:choice_id>/update/', views.choice_update, name='choice_update'),
+  path('choices/<str:choice_id>/update/', views.choice_update, name='choice_update'),
     
   # Delete choice
-  path('choices/<int:choice_id>/delete/', views.choice_delete, name='choice_delete'),
+  path('choices/<str:choice_id>/delete/', views.choice_delete, name='choice_delete'),
 ]
