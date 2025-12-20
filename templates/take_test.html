@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Take Test: {{ test.subject }}{% endblock %}
+{% block page_title %}{{ test.subject }}{% endblock %}
+{% block page_subtitle %}{{ test.description }}{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6>Test Information</h6>
+                <p class="mb-0">
+                    <i class="bi bi-clock"></i> Time Limit: {{ test.time_limit }} minutes
+                    <span class="ms-3">
+                        <i class="bi bi-question-circle"></i> {{ questions|length }} questions
+                    </span>
+                </p>
+            </div>
+            <div>
+                {% if not attempt.is_completed %}
+                <form method="post" id="testForm">
+                    {% csrf_token %}
+                    <button type="submit" name="save_progress" class="btn btn-outline-primary">
+                        <i class="bi bi-save"></i> Save Progress
+                    </button>
+                    <button type="submit" name="submit_test" class="btn btn-success ms-2">
+                        <i class="bi bi-check-circle"></i> Submit Test
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<form method="post" id="testForm">
+    {% csrf_token %}
+    
+    {% for question in questions %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between mb-2">
+                <h6 class="card-title">Question {{ forloop.counter }}</h6>
+                <span class="badge bg-dark">
+                    <i class="bi bi-star-fill"></i> {{ question.marks }} marks
+                </span>
+            </div>
+            
+            <p class="card-text">{{ question.question_text }}</p>
+            
+            {% if question.explanation %}
+            <div class="alert alert-light mb-3">
+                <small><i class="bi bi-info-circle"></i> {{ question.explanation }}</small>
+            </div>
+            {% endif %}
+            
+            <div class="choices mt-3">
+                {% if question.question_type == 'single' %}
+                    <!-- Single Choice Questions -->
+                    {% for choice in question.choices.all %}
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" 
+                               type="radio" 
+                               name="question_{{ question.id }}" 
+                               id="choice_{{ choice.id }}"
+                               value="{{ choice.id }}"
+                               {% if attempt.is_completed %}disabled{% endif %}>
+                        <label class="form-check-label" for="choice_{{ choice.id }}">
+                            {{ choice.choice_text }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                    
+                {% elif question.question_type == 'multiple' %}
+                    <!-- Multiple Choice Questions -->
+                    {% for choice in question.choices.all %}
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" 
+                               type="checkbox" 
+                               name="question_{{ question.id }}" 
+                               id="choice_{{ choice.id }}"
+                               value="{{ choice.id }}"
+                               {% if attempt.is_completed %}disabled{% endif %}>
+                        <label class="form-check-label" for="choice_{{ choice.id }}">
+                            {{ choice.choice_text }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    
+    {% if not attempt.is_completed %}
+    <div class="sticky-bottom bg-white py-3 border-top">
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'student_test_list' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Tests
+            </a>
+            <div>
+                <button type="submit" name="save_progress" class="btn btn-outline-primary">
+                    <i class="bi bi-save"></i> Save Progress
+                </button>
+                <button type="submit" name="submit_test" class="btn btn-success ms-2">
+                    <i class="bi bi-check-circle"></i> Submit Test
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</form>
+
+{% if attempt.is_completed %}
+<div class="alert alert-info mt-3">
+    <i class="bi bi-info-circle"></i> This test has already been submitted. You can view your results.
+</div>
+{% endif %}
+{% endblock %}

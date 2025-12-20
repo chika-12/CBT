@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Results - CBT System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .status-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .results-section {
+            padding: 40px;
+        }
+        
+        .score-card {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 20px rgba(67, 233, 123, 0.3);
+        }
+        
+        .score-card.failed {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffa8a8 100%);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+        
+        .percentage {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+        
+        .score-detail {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .detail-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s ease;
+        }
+        
+        .detail-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .detail-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .detail-value {
+            font-size: 1.4rem;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #495057;
+            border: 2px solid #e9ecef;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+        }
+        
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+        
+        .performance-meter {
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 6px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .performance-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #43e97b, #38f9d7);
+            border-radius: 6px;
+            width: 0%;
+            transition: width 1.5s ease;
+        }
+        
+        .performance-fill.failed {
+            background: linear-gradient(90deg, #ff6b6b, #ffa8a8);
+        }
+        
+        .timestamp {
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .message-box {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #2196f3;
+            margin: 20px 0;
+        }
+        
+        .message-box p {
+            margin: 0;
+            color: #0d47a1;
+            font-weight: 500;
+        }
+        
+        /* Questions Review Styles */
+        .questions-review {
+            margin-top: 40px;
+        }
+        
+        .questions-review h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .question-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #43e97b;
+        }
+        
+        .question-item.incorrect {
+            border-left-color: #ff6b6b;
+        }
+        
+        .question-item.unanswered {
+            border-left-color: #6c757d;
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .question-status {
+            color: #43e97b;
+            font-weight: 600;
+        }
+        
+        .question-status.incorrect {
+            color: #ff6b6b;
+        }
+        
+        .question-status.unanswered {
+            color: #6c757d;
+        }
+        
+        .answer-section {
+            margin-top: 15px;
+        }
+        
+        .answer-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 8px;
+        }
+        
+        .student-answer {
+            background: #d1e7dd;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+        
+        .student-answer.incorrect {
+            background: #f8d7da;
+        }
+        
+        .student-answer.unanswered {
+            background: #e2e3e5;
+        }
+        
+        .correct-answer {
+            background: #d1e7dd;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 5px;
+        }
+        
+        .explanation {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .explanation-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        
+        .explanation-text {
+            color: #495057;
+            font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .results-section {
+                padding: 20px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .question-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Test Results</h1>
+            <p>Computer Based Test System</p>
+            <div class="status-badge">
+                {% if score_details.is_passed %}PASSED{% else %}FAILED{% endif %}
+            </div>
+        </div>
+        
+        <div class="results-section">
+            <div class="score-card {% if not score_details.is_passed %}failed{% endif %}">
+                <div class="percentage">{{ score_details.percentage|floatformat:1 }}%</div>
+                <div class="score-detail">
+                    {{ score_details.score_obtained }} out of {{ score_details.total_score }} points
+                </div>
+                <div style="margin-top: 10px; font-size: 1rem;">
+                    Passing Score: {{ score_details.passing_threshold }}%
+                </div>
+            </div>
+            
+            <div class="performance-meter">
+                <div class="performance-fill {% if not score_details.is_passed %}failed{% endif %}" 
+                     style="width: {{ score_details.percentage }}%;"></div>
+            </div>
+            
+            <div class="details-grid">
+                <div class="detail-card">
+                    <div class="detail-label">Student Name</div>
+                    <div class="detail-value">{{ student.full_name|default:"Student" }}</div>
+                </div>
+                
+                <div class="detail-card">
+                    <div class="detail-label">Test Subject</div>
+                    <div class="detail-value">{{ test.subject }}</div>
+                </div>
+                
+                <div class="detail-card">
+                    <div class="detail-label">Score</div>
+                    <div class="detail-value">{{ score_details.score_obtained }}/{{ score_details.total_score }}</div>
+                </div>
+                
+                <div class="detail-card">
+                    <div class="detail-label">Status</div>
+                    <div class="detail-value">
+                        <span style="color: {% if score_details.is_passed %}#43e97b{% else %}#ff6b6b{% endif %};">
+                            {% if score_details.is_passed %}Passed ✓{% else %}Failed ✗{% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Personalized message based on score -->
+            {% if score_details.percentage >= 80 %}
+            <div class="message-box">
+                <p>🎉 Excellent work{% if student.first_name %}, {{ student.first_name }}{% endif %}! You've scored exceptionally well on this test. Keep up the great performance!</p>
+            </div>
+            {% elif score_details.percentage >= 60 %}
+            <div class="message-box">
+                <p>👍 Good job{% if student.first_name %}, {{ student.first_name }}{% endif %}! You passed the test. Review the questions you missed for even better results next time.</p>
+            </div>
+            {% elif score_details.percentage >= 40 %}
+            <div class="message-box">
+                <p>📚 You need more practice{% if student.first_name %}, {{ student.first_name }}{% endif %}. Consider reviewing the course material and taking practice tests.</p>
+            </div>
+            {% else %}
+            <div class="message-box">
+                <p>📖 We recommend studying the material thoroughly before attempting the test again{% if student.first_name %}, {{ student.first_name }}{% endif %}.</p>
+            </div>
+            {% endif %}
+            
+            <!-- Questions Review Section -->
+            {% if question_details %}
+            <div class="questions-review">
+                <h3>Question Review ({{ question_details|length }} Questions)</h3>
+                {% for detail in question_details %}
+                <div class="question-item 
+                    {% if detail.is_correct %}{% elif detail.student_answer %}incorrect{% else %}unanswered{% endif %}">
+                    
+                    <div class="question-header">
+                        <h4 style="margin: 0; color: #333;">Question {{ forloop.counter }} ({{ detail.question_score }}/{{ detail.max_score }} points)</h4>
+                        <span class="question-status 
+                            {% if detail.is_correct %}{% elif detail.student_answer %}incorrect{% else %}unanswered{% endif %}">
+                            {% if detail.is_correct %}
+                                ✓ Correct
+                            {% elif detail.student_answer %}
+                                ✗ Incorrect
+                            {% else %}
+                                ○ Not Answered
+                            {% endif %}
+                        </span>
+                    </div>
+                    
+                    <p style="margin-bottom: 15px; color: #555;">{{ detail.question.question_text }}</p>
+                    
+                    <div class="answer-section">
+                        <div class="answer-label">Your Answer:</div>
+                        {% if detail.student_answer %}
+                            {% if detail.question.question_type == "multiple" %}
+                                <!-- For multiple choice questions -->
+                                <div class="student-answer {% if not detail.is_correct %}incorrect{% endif %}">
+                                    {% if detail.student_answer.selected_choice %}
+                                        {{ detail.student_answer.selected_choice.choice_text }}
+                                        (Multiple choice question - check details below)
+                                    {% else %}
+                                        No choice selected
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <!-- For single choice questions -->
+                                <div class="student-answer {% if not detail.is_correct %}incorrect{% endif %}">
+                                    {{ detail.student_answer.selected_choice.choice_text }}
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="student-answer unanswered">
+                                No answer provided
+                            </div>
+                        {% endif %}
+                        
+                        <div class="answer-label">Correct Answer{% if detail.correct_choices.count > 1 %}s{% endif %}:</div>
+                        {% for correct_choice in detail.correct_choices %}
+                            <div class="correct-answer">
+                                {{ correct_choice.choice_text }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    {% if detail.question.explanation %}
+                    <div class="explanation">
+                        <div class="explanation-label">Explanation:</div>
+                        <p class="explanation-text">{{ detail.question.explanation }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="action-buttons">
+                <a href="{% url 'student_test_list' %}" class="btn btn-primary">
+                    🏠 Back to Tests
+                </a>
+                <button onclick="window.print()" class="btn btn-secondary">
+                    🖨️ Print Results
+                </button>
+                <button onclick="shareResults()" class="btn btn-secondary">
+                    📤 Share Results
+                </button>
+            </div>
+            
+            <div class="timestamp">
+                Test completed on {{ attempt.end_time|date:"F j, Y" }} at {{ attempt.end_time|time:"g:i A" }}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Animate the progress bar
+        document.addEventListener('DOMContentLoaded', function() {
+            const fill = document.querySelector('.performance-fill');
+            if (fill) {
+                const width = fill.style.width;
+                fill.style.width = '0%';
+                
+                setTimeout(() => {
+                    fill.style.width = width;
+                }, 300);
+            }
+        });
+        
+        function shareResults() {
+            const studentName = "{{ student.full_name|default:'Student' }}";
+            const percentage = Math.round({{ score_details.percentage }});
+            const subject = "{{ test.subject }}";
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Test Results',
+                    text: `${studentName} scored ${percentage}% on the ${subject} test!`,
+                    url: window.location.href,
+                })
+                .then(() => console.log('Successful share'))
+                .catch((error) => console.log('Error sharing:', error));
+            } else {
+                alert('Share feature is not supported in your browser. You can copy the URL instead.');
+            }
+        }
+        
+        // Add confetti animation for high scores
+        {% if score_details.percentage >= 80 %}
+        setTimeout(() => {
+            createConfetti();
+        }, 1000);
+        
+        function createConfetti() {
+            const colors = ['#667eea', '#764ba2', '#43e97b', '#38f9d7', '#ff6b6b'];
+            const confettiCount = 100;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = '50%';
+                confetti.style.top = '0';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.opacity = '0.8';
+                confetti.style.zIndex = '9999';
+                confetti.style.pointerEvents = 'none';
+                document.body.appendChild(confetti);
+                
+                // Animate
+                const animation = confetti.animate([
+                    { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                    { transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: Math.random() * 3000 + 2000,
+                    easing: 'cubic-bezier(0.215, 0.610, 0.355, 1)'
+                });
+                
+                animation.onfinish = () => confetti.remove();
+            }
+        }
+        {% endif %}
+    </script>
+</body>
+</html>

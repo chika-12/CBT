@@ -56,3 +56,27 @@ class Choice(models.Model):
     
   def __str__(self):
     return f"{self.choice_text[:30]}... ({'✓' if self.is_correct else '✗'})"
+
+
+class StudentTestAttempt(models.Model):
+  student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+  test = models.ForeignKey('Test', on_delete=models.CASCADE)
+  start_time = models.DateTimeField(auto_now_add=True)
+  end_time = models.DateTimeField(null=True, blank=True)
+  is_completed = models.BooleanField(default=False)
+  total_score = models.IntegerField(default=0)
+  earned_score = models.IntegerField(default=0)
+  percentage = models.FloatField(default=0)
+    
+  class Meta:
+    unique_together = ['student', 'test']
+
+class StudentAnswer(models.Model):
+  attempt = models.ForeignKey(StudentTestAttempt, on_delete=models.CASCADE)
+  question = models.ForeignKey('Questions', on_delete=models.CASCADE)
+  selected_choice = models.ForeignKey('Choice', on_delete=models.CASCADE, null=True, blank=True)
+  # For multiple choice questions, you might want a ManyToManyField:
+  # selected_choices = models.ManyToManyField('Choice')
+    
+  class Meta:
+    unique_together = ['attempt', 'question']

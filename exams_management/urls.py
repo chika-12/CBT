@@ -46,4 +46,9 @@ urlpatterns = [
     
   # Delete choice
   path('choices/<str:choice_id>/delete/', views.choice_delete, name='choice_delete'),
+  path('student/tests/', views.student_test_list, name='student_test_list'),
+  path('student/tests/<str:test_id>/take/', views.take_test, name='take_test'),
+  path('student/results/<str:attempt_id>/', views.test_results, name='test_results'),
+
+
 ]

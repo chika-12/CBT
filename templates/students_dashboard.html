@@ -8,6 +8,10 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --primary: #4361ee;
@@ -365,6 +369,8 @@
       /* Exam Card Specific */
       .exams-list {
         list-style: none;
+        max-height: 300px;
+        overflow-y: auto;
       }
 
       .exam-item {
@@ -397,6 +403,8 @@
       /* Results Card Specific */
       .results-progress {
         margin-top: 20px;
+        max-height: 250px;
+        overflow-y: auto;
       }
 
       .progress-item {
@@ -493,6 +501,8 @@
       /* Issues Card Specific */
       .issues-list {
         list-style: none;
+        max-height: 300px;
+        overflow-y: auto;
       }
 
       .issue-item {
@@ -555,6 +565,8 @@
 
       .activity-list {
         list-style: none;
+        max-height: 400px;
+        overflow-y: auto;
       }
 
       .activity-item {
@@ -598,86 +610,6 @@
       .activity-time {
         color: rgba(255, 255, 255, 0.6);
         font-size: 0.85rem;
-      }
-
-      /* Modal */
-      .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        z-index: 1000;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .modal-content {
-        background: var(--glass);
-        backdrop-filter: blur(30px);
-        border-radius: 20px;
-        border: 1px solid var(--glass-border);
-        width: 90%;
-        max-width: 500px;
-        padding: 30px;
-        position: relative;
-        animation: modalSlideIn 0.3s ease;
-      }
-
-      @keyframes modalSlideIn {
-        from {
-          opacity: 0;
-          transform: translateY(-50px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-
-      .modal-title {
-        color: white;
-        font-size: 1.5rem;
-      }
-
-      .close-modal {
-        background: none;
-        border: none;
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 1.5rem;
-        cursor: pointer;
-        transition: color 0.3s;
-      }
-
-      .close-modal:hover {
-        color: white;
-      }
-
-      .modal-body input,
-      .modal-body textarea,
-      .modal-body select {
-        width: 100%;
-        padding: 12px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid var(--glass-border);
-        border-radius: 10px;
-        color: white;
-        margin-bottom: 15px;
-        font-size: 1rem;
-      }
-
-      .modal-body input::placeholder,
-      .modal-body textarea::placeholder {
-        color: rgba(255, 255, 255, 0.5);
       }
 
       /* Quick Stats Bar */
@@ -736,6 +668,25 @@
         margin-top: 30px;
       }
 
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-light);
+      }
+
       /* Responsive Design */
       @media (max-width: 1200px) {
         .dashboard-grid {
@@ -774,24 +725,32 @@
         .quick-stats {
           grid-template-columns: repeat(2, 1fr);
         }
-      }
 
-      @media (max-width: 480px) {
         .card-actions {
-          flex-direction: column;
+          flex-wrap: wrap;
         }
 
         .btn {
-          width: 100%;
-          justify-content: center;
+          flex: 1;
+          min-width: 150px;
         }
+      }
 
+      @media (max-width: 480px) {
         .books-grid {
           grid-template-columns: 1fr;
         }
 
         .quick-stats {
           grid-template-columns: 1fr;
+        }
+
+        .card-actions {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
         }
       }
 
@@ -806,6 +765,27 @@
         }
         to {
           width: var(--progress-width);
+        }
+      }
+
+      /* Loading Animation */
+      .loading-shimmer {
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.1) 25%,
+          rgba(255, 255, 255, 0.2) 50%,
+          rgba(255, 255, 255, 0.1) 75%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
         }
       }
     </style>
@@ -852,7 +832,7 @@
               {{ request.user.email }} {% endif %}!
             </h1>
             <p>
-              {% if user %} Student ID: {{ user.id }} {% endif %}
+              {% if user %} Student ID: {{ user.id }} | {% endif %}
               {% if request.user.email %} {{ request.user.email }} {% endif %}
             </p>
           </div>
@@ -868,7 +848,11 @@
           </div>
           <div class="status-badge">
             <i class="fas fa-user-shield"></i>
-            {{ request.user.role|title }}
+            {% if request.user.profile.role %}
+              {{ request.user.profile.role|title }}
+            {% else %}
+              Student
+            {% endif %}
           </div>
         </div>
       </header>
@@ -889,7 +873,7 @@
             <i class="fas fa-file-alt"></i>
           </div>
           <div class="stat-content">
-            <h3 id="availableExams">0</h3>
+            <h3 id="availableExams">{{ published_tests.count }}</h3>
             <p>Available Exams</p>
           </div>
         </div>
@@ -907,7 +891,7 @@
             <i class="fas fa-chart-line"></i>
           </div>
           <div class="stat-content">
-            <h3 id="attendanceRate">0%</h3>
+            <h3 id="attendanceRate">92%</h3>
             <p>Attendance Rate</p>
           </div>
         </div>
@@ -919,7 +903,7 @@
             <i class="fas fa-book"></i>
           </div>
           <div class="stat-content">
-            <h3 id="libraryBooks">0</h3>
+            <h3 id="libraryBooks">250</h3>
             <p>Library Books</p>
           </div>
         </div>
@@ -931,8 +915,8 @@
             <i class="fas fa-dollar-sign"></i>
           </div>
           <div class="stat-content">
-            <h3 id="feeStatus">0</h3>
-            <p>Fee Status</p>
+            <h3 id="feeStatus">50%</h3>
+            <p>Fee Paid</p>
           </div>
         </div>
       </div>
@@ -948,7 +932,7 @@
               </div>
               Published Exams
             </h2>
-            <div class="card-stats" id="examCount">0 Available</div>
+            <div class="card-stats" id="examCount">{{ published_tests.count }} Available</div>
           </div>
           <div class="card-content">
             <p>
@@ -956,31 +940,55 @@
               preparation.
             </p>
             <ul class="exams-list" id="examsList">
-              <!-- Exams will be loaded via JavaScript -->
-              <li class="exam-item">
-                <div class="exam-title">Loading exams...</div>
-                <div class="exam-meta">
-                  <span>
-                    <i class="far fa-clock"></i>
-                    --:--
-                  </span>
-                  <span>
-                    <i class="far fa-calendar"></i>
-                    --/--/----
-                  </span>
-                </div>
-              </li>
+              {% if published_tests %}
+                {% for test in published_tests|slice:":3" %}
+                <li class="exam-item">
+                  <div class="exam-title">{{ test.subject }}</div>
+                  <div class="exam-meta">
+                    <span>
+                      <i class="far fa-clock"></i>
+                      {{ test.time_limit }} mins
+                    </span>
+                    <span>
+                      <i class="far fa-calendar"></i>
+                      {{ test.date_added|date:"M d, Y" }}
+                    </span>
+                  </div>
+                </li>
+                {% endfor %}
+              {% else %}
+                <li class="exam-item">
+                  <div class="exam-title">No exams available</div>
+                  <div class="exam-meta">
+                    <span>
+                      <i class="far fa-clock"></i>
+                      --
+                    </span>
+                    <span>
+                      <i class="far fa-calendar"></i>
+                      --
+                    </span>
+                  </div>
+                </li>
+              {% endif %}
             </ul>
           </div>
           <div class="card-actions">
-            <a href="{% url 'exam_list' %}" class="btn btn-primary">
+            <a href="{% url 'student_test_list' %}" class="btn btn-primary">
               <i class="fas fa-eye"></i>
               View All Exams
             </a>
-            <button class="btn btn-success" onclick="startPracticeExam()">
+            {% if published_tests %}
+            <a href="{% url 'take_test' test_id=published_tests.first.id %}" class="btn btn-success">
+              <i class="fas fa-play-circle"></i>
+              Start Practice
+            </a>
+            {% else %}
+            <button class="btn btn-success" disabled>
               <i class="fas fa-play-circle"></i>
               Start Practice
             </button>
+            {% endif %}
           </div>
         </div>
 
@@ -993,32 +1001,53 @@
               </div>
               Results & Performance
             </h2>
-            <div class="card-stats" id="overallGrade">0%</div>
+            <div class="card-stats" id="overallGrade">
+              {% if overall_grade %}{{ overall_grade }}%{% else %}0%{% endif %}
+            </div>
           </div>
           <div class="card-content">
             <p>View your academic performance, grades, and progress reports.</p>
             <div class="results-progress" id="resultsProgress">
-              <!-- Progress bars will be loaded via JavaScript -->
-              <div class="progress-item">
-                <div class="progress-header">
-                  <span>Loading...</span>
-                  <span>0%</span>
+              {% if test_results %}
+                {% for result in test_results|slice:":3" %}
+                <div class="progress-item">
+                  <div class="progress-header">
+                    <span>{{ result.test.subject|truncatechars:20 }}</span>
+                    <span>{{ result.percentage|floatformat:0 }}%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div
+                      class="progress-fill"
+                      style="--progress-width: {{ result.percentage|floatformat:0 }}%;"
+                      data-width="{{ result.percentage|floatformat:0 }}"
+                    ></div>
+                  </div>
                 </div>
-                <div class="progress-bar">
-                  <div
-                    class="progress-fill"
-                    style="--progress-width: 0%"
-                    data-width="0"
-                  ></div>
+                {% endfor %}
+              {% else %}
+                <div class="progress-item">
+                  <div class="progress-header">
+                    <span>No results yet</span>
+                    <span>0%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div
+                      class="progress-fill"
+                      style="--progress-width: 0%;"
+                      data-width="0"
+                    ></div>
+                  </div>
                 </div>
-              </div>
+              {% endif %}
             </div>
           </div>
           <div class="card-actions">
+            {% if test_results %}
             <a href="{% url 'student_results' %}" class="btn btn-primary">
               <i class="fas fa-chart-pie"></i>
               Detailed Analysis
             </a>
+            {% endif %}
             <button class="btn btn-secondary" onclick="downloadTranscript()">
               <i class="fas fa-download"></i>
               Download Report
@@ -1035,35 +1064,35 @@
               </div>
               Fees & Payments
             </h2>
-            <div class="card-stats" id="totalDue">$0</div>
+            <div class="card-stats" id="totalDue">$1,250</div>
           </div>
           <div class="card-content">
             <p>Pay tuition fees, access fee, and view payment history.</p>
             <div class="fees-status">
               <div>
-                <div class="fees-amount" id="totalFees">$0</div>
+                <div class="fees-amount" id="totalFees">$2,500</div>
                 <div>Total Fees</div>
               </div>
               <div>
-                <div class="fees-paid" id="paidAmount">$0</div>
+                <div class="fees-paid" id="paidAmount">$1,250</div>
                 <div>Paid</div>
               </div>
               <div>
-                <div class="fees-due" id="dueAmount">$0</div>
+                <div class="fees-due" id="dueAmount">$1,250</div>
                 <div>Due</div>
               </div>
             </div>
             <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7)">
               Due Date:
-              <span id="dueDate">--/--/----</span>
+              <span id="dueDate">June 15, 2024</span>
             </p>
           </div>
           <div class="card-actions">
-            <a href="{% url 'payment_page' %}" class="btn btn-success">
+            <button class="btn btn-success" onclick="showPaymentModal()">
               <i class="fas fa-dollar-sign"></i>
               Pay Now
-            </a>
-            <a href="{% url 'payment_history' %}" class="btn btn-secondary">
+            </button>
+            <a href="#" class="btn btn-secondary" onclick="showPaymentHistory()">
               <i class="fas fa-history"></i>
               Payment History
             </a>
@@ -1079,27 +1108,47 @@
               </div>
               Digital Library
             </h2>
-            <div class="card-stats" id="totalBooks">0+</div>
+            <div class="card-stats" id="totalBooks">250+</div>
           </div>
           <div class="card-content">
             <p>Access e-books, research papers, and academic resources.</p>
             <div class="books-grid" id="booksGrid">
-              <!-- Books will be loaded via JavaScript -->
               <div class="book-item">
                 <div class="book-icon">
                   <i class="fas fa-book"></i>
                 </div>
-                <div class="book-title">Loading...</div>
-                <div class="book-author">----</div>
+                <div class="book-title">Introduction to Algorithms</div>
+                <div class="book-author">Thomas H. Cormen</div>
+              </div>
+              <div class="book-item">
+                <div class="book-icon">
+                  <i class="fas fa-book"></i>
+                </div>
+                <div class="book-title">Clean Code</div>
+                <div class="book-author">Robert C. Martin</div>
+              </div>
+              <div class="book-item">
+                <div class="book-icon">
+                  <i class="fas fa-file-pdf"></i>
+                </div>
+                <div class="book-title">Python Documentation</div>
+                <div class="book-author">Python.org</div>
+              </div>
+              <div class="book-item">
+                <div class="book-icon">
+                  <i class="fas fa-video"></i>
+                </div>
+                <div class="book-title">CS50 Lectures</div>
+                <div class="book-author">Harvard University</div>
               </div>
             </div>
           </div>
           <div class="card-actions">
-            <a href="{% url 'library' %}" class="btn btn-primary">
+            <button class="btn btn-primary" onclick="showLibraryModal()">
               <i class="fas fa-search"></i>
               Browse Library
-            </a>
-            <a href="{% url 'borrowed_books' %}" class="btn btn-secondary">
+            </button>
+            <a href="#" class="btn btn-secondary" onclick="showBorrowedBooks()">
               <i class="fas fa-bookmark"></i>
               My Borrowed
             </a>
@@ -1137,7 +1186,7 @@
                   id="enrollmentStatus"
                   style="color: var(--success); font-weight: 600"
                 >
-                  Checking...
+                  Active ✓
                 </span>
               </div>
               <div
@@ -1176,7 +1225,7 @@
               </div>
               <div style="display: flex; justify-content: space-between">
                 <span style="color: rgba(255, 255, 255, 0.8)">
-                  Member Since: <!---->{{request.user.date_added}}
+                  Member Since:
                 </span>
                 <span
                   id="memberSince"
@@ -1209,7 +1258,7 @@
               </div>
               Report Issues
             </h2>
-            <div class="card-stats" id="pendingIssues">0 Pending</div>
+            <div class="card-stats" id="pendingIssues">2 Pending</div>
           </div>
           <div class="card-content">
             <p>
@@ -1217,27 +1266,31 @@
               problems.
             </p>
             <ul class="issues-list" id="issuesList">
-              <!-- Issues will be loaded via JavaScript -->
               <li class="issue-item">
                 <div class="issue-header">
-                  <div class="issue-title">Loading issues...</div>
+                  <div class="issue-title">Portal Login Issue</div>
                   <div class="issue-status pending">Pending</div>
                 </div>
-                <div class="issue-desc">
-                  Please wait while we load your issues
+                <div class="issue-desc">Unable to access course materials section</div>
+              </li>
+              <li class="issue-item resolved">
+                <div class="issue-header">
+                  <div class="issue-title">Grade Update Request</div>
+                  <div class="issue-status resolved">Resolved</div>
                 </div>
+                <div class="issue-desc">Request for grade review in Algorithms</div>
               </li>
             </ul>
           </div>
           <div class="card-actions">
-            <a href="{% url 'report_issue' %}" class="btn btn-danger">
+            <button class="btn btn-danger" onclick="showIssueModal()">
               <i class="fas fa-exclamation-circle"></i>
               Report New Issue
-            </a>
-            <a href="{% url 'view_issues' %}" class="btn btn-secondary">
+            </button>
+            <button class="btn btn-secondary" onclick="showAllIssues()">
               <i class="fas fa-list"></i>
               View All Issues
-            </a>
+            </button>
           </div>
         </div>
 
@@ -1248,14 +1301,49 @@
             Recent Activity
           </h2>
           <ul class="activity-list" id="activityList">
-            <!-- Activities will be loaded via JavaScript -->
             <li class="activity-item">
               <div class="activity-icon">
-                <i class="fas fa-sync-alt fa-spin"></i>
+                <i class="fas fa-file-upload"></i>
               </div>
               <div class="activity-content">
-                <div class="activity-title">Loading activities...</div>
-                <div class="activity-time">Just now</div>
+                <div class="activity-title">Submitted Algorithms Assignment</div>
+                <div class="activity-time">2 hours ago</div>
+              </div>
+            </li>
+            <li class="activity-item">
+              <div class="activity-icon" style="background: linear-gradient(135deg, var(--success), var(--success-dark));">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div class="activity-content">
+                <div class="activity-title">Completed Data Structures Test</div>
+                <div class="activity-time">Yesterday</div>
+              </div>
+            </li>
+            <li class="activity-item">
+              <div class="activity-icon" style="background: linear-gradient(135deg, var(--info), #5a189a);">
+                <i class="fas fa-book"></i>
+              </div>
+              <div class="activity-content">
+                <div class="activity-title">Accessed Digital Library</div>
+                <div class="activity-time">2 days ago</div>
+              </div>
+            </li>
+            <li class="activity-item">
+              <div class="activity-icon" style="background: linear-gradient(135deg, var(--warning), #f3722c);">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <div class="activity-content">
+                <div class="activity-title">Reported Portal Issue</div>
+                <div class="activity-time">3 days ago</div>
+              </div>
+            </li>
+            <li class="activity-item">
+              <div class="activity-icon" style="background: linear-gradient(135deg, var(--primary), var(--secondary));">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <div class="activity-content">
+                <div class="activity-title">Viewed Midterm Results</div>
+                <div class="activity-time">1 week ago</div>
               </div>
             </li>
           </ul>
@@ -1267,7 +1355,8 @@
         <p>© {% now "Y" %} Student Learning Portal | All Rights Reserved</p>
         <p style="margin-top: 10px">
           <a
-            href="{% url 'help_center' %}"
+            href="#"
+            onclick="showHelpModal()"
             style="
               color: rgba(255, 255, 255, 0.8);
               text-decoration: none;
@@ -1279,7 +1368,8 @@
           </a>
           |
           <a
-            href="{% url 'system_settings' %}"
+            href="#"
+            onclick="showSettingsModal()"
             style="
               color: rgba(255, 255, 255, 0.8);
               text-decoration: none;
@@ -1306,6 +1396,64 @@
       </footer>
     </div>
 
+    <!-- Modals -->
+    <div id="paymentModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Make Payment</h3>
+          <button class="close-modal" onclick="closeModal('paymentModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Select payment method and amount:</p>
+          <select class="form-control mb-3">
+            <option>Credit/Debit Card</option>
+            <option>Bank Transfer</option>
+            <option>Mobile Payment</option>
+          </select>
+          <input type="number" class="form-control mb-3" placeholder="Amount ($)" value="1250">
+          <button class="btn btn-success w-100">Process Payment</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="issueModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Report Issue</h3>
+          <button class="close-modal" onclick="closeModal('issueModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control mb-3" placeholder="Issue Title">
+          <select class="form-control mb-3">
+            <option>Technical Issue</option>
+            <option>Academic Concern</option>
+            <option>Administrative Problem</option>
+            <option>Other</option>
+          </select>
+          <textarea class="form-control mb-3" rows="4" placeholder="Describe your issue..."></textarea>
+          <button class="btn btn-danger w-100">Submit Report</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="helpModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Help Center</h3>
+          <button class="close-modal" onclick="closeModal('helpModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>For assistance, please contact:</p>
+          <ul>
+            <li><strong>Email:</strong> support@learningportal.com</li>
+            <li><strong>Phone:</strong> +1 (555) 123-4567</li>
+            <li><strong>Hours:</strong> Mon-Fri, 9AM-5PM</li>
+          </ul>
+          <button class="btn btn-primary w-100" onclick="closeModal('helpModal')">Close</button>
+        </div>
+      </div>
+    </div>
+
     <!-- JavaScript -->
     <script>
       // Initialize animations
@@ -1319,9 +1467,6 @@
             bar.classList.add("animate-progress");
           }, 300);
         });
-
-        // Load dashboard data
-        loadDashboardData();
 
         // Auto-remove messages after 5 seconds
         setTimeout(() => {
@@ -1349,195 +1494,45 @@
         `;
       document.head.appendChild(style);
 
-      // Mock data loading function (Replace with actual API calls)
-      async function loadDashboardData() {
-        // Simulate API delay
-        await new Promise((resolve) => setTimeout(resolve, 500));
+      // Modal functions
+      function showModal(modalId) {
+        document.getElementById(modalId).style.display = 'flex';
+      }
 
-        // Update exam data
-        document.getElementById("availableExams").textContent = "4";
-        document.getElementById("examCount").textContent = "4 Available";
+      function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+      }
 
-        // Update exam list
-        const examsList = document.getElementById("examsList");
-        examsList.innerHTML = `
-                <li class="exam-item">
-                    <div class="exam-title">Data Structures Final</div>
-                    <div class="exam-meta">
-                        <span><i class="far fa-clock"></i> 2h 30m</span>
-                        <span><i class="far fa-calendar"></i> May 15, 2024</span>
-                    </div>
-                </li>
-                <li class="exam-item">
-                    <div class="exam-title">Algorithms Midterm</div>
-                    <div class="exam-meta">
-                        <span><i class="far fa-clock"></i> 1h 45m</span>
-                        <span><i class="far fa-calendar"></i> May 20, 2024</span>
-                    </div>
-                </li>
-            `;
+      function showPaymentModal() {
+        showModal('paymentModal');
+      }
 
-        // Update results
-        document.getElementById("overallGrade").textContent = "87%";
-        document.getElementById("resultsProgress").innerHTML = `
-                <div class="progress-item">
-                    <div class="progress-header">
-                        <span>Data Structures</span>
-                        <span>85%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="--progress-width: 85%;" data-width="85"></div>
-                    </div>
-                </div>
-                <div class="progress-item">
-                    <div class="progress-header">
-                        <span>Algorithms</span>
-                        <span>92%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="--progress-width: 92%;" data-width="92"></div>
-                    </div>
-                </div>
-                <div class="progress-item">
-                    <div class="progress-header">
-                        <span>Database Systems</span>
-                        <span>78%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="--progress-width: 78%;" data-width="78"></div>
-                    </div>
-                </div>
-            `;
+      function showIssueModal() {
+        showModal('issueModal');
+      }
 
-        // Update fees
-        document.getElementById("totalDue").textContent = "$1,250";
-        document.getElementById("totalFees").textContent = "$2,500";
-        document.getElementById("paidAmount").textContent = "$1,250";
-        document.getElementById("dueAmount").textContent = "$1,250";
-        document.getElementById("dueDate").textContent = "June 15, 2024";
+      function showHelpModal() {
+        showModal('helpModal');
+      }
 
-        // Update library
-        document.getElementById("libraryBooks").textContent = "250";
-        document.getElementById("totalBooks").textContent = "250+";
-        document.getElementById("booksGrid").innerHTML = `
-                <div class="book-item">
-                    <div class="book-icon">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <div class="book-title">Algorithms</div>
-                    <div class="book-author">Cormen</div>
-                </div>
-                <div class="book-item">
-                    <div class="book-icon">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <div class="book-title">Clean Code</div>
-                    <div class="book-author">Robert Martin</div>
-                </div>
-                <div class="book-item">
-                    <div class="book-icon">
-                        <i class="fas fa-file-pdf"></i>
-                    </div>
-                    <div class="book-title">Research Paper</div>
-                    <div class="book-author">IEEE</div>
-                </div>
-                <div class="book-item">
-                    <div class="book-icon">
-                        <i class="fas fa-video"></i>
-                    </div>
-                    <div class="book-title">CS50 Lectures</div>
-                    <div class="book-author">Harvard</div>
-                </div>
-            `;
+      function showSettingsModal() {
+        alert('Settings functionality coming soon!');
+      }
 
-        // Update attendance
-        document.getElementById("attendanceRate").textContent = "92%";
+      function showPaymentHistory() {
+        alert('Payment history functionality coming soon!');
+      }
 
-        // Update fee status
-        document.getElementById("feeStatus").textContent = "50%";
+      function showLibraryModal() {
+        alert('Library functionality coming soon!');
+      }
 
-        // Update issues
-        document.getElementById("pendingIssues").textContent = "2 Pending";
-        document.getElementById("issuesList").innerHTML = `
-                <li class="issue-item">
-                    <div class="issue-header">
-                        <div class="issue-title">Portal Login Issue</div>
-                        <div class="issue-status pending">Pending</div>
-                    </div>
-                    <div class="issue-desc">Unable to access course materials section</div>
-                </li>
-                <li class="issue-item resolved">
-                    <div class="issue-header">
-                        <div class="issue-title">Grade Update Request</div>
-                        <div class="issue-status resolved">Resolved</div>
-                    </div>
-                    <div class="issue-desc">Request for grade review in Algorithms</div>
-                </li>
-            `;
+      function showBorrowedBooks() {
+        alert('Borrowed books functionality coming soon!');
+      }
 
-        // Update activities
-        document.getElementById("activityList").innerHTML = `
-                <li class="activity-item">
-                    <div class="activity-icon">
-                        <i class="fas fa-file-upload"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">Submitted Algorithms Assignment</div>
-                        <div class="activity-time">2 hours ago</div>
-                    </div>
-                </li>
-                <li class="activity-item">
-                    <div class="activity-icon" style="background: linear-gradient(135deg, var(--success), var(--success-dark));">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">Paid Semester Fees</div>
-                        <div class="activity-time">Yesterday</div>
-                    </div>
-                </li>
-                <li class="activity-item">
-                    <div class="activity-icon" style="background: linear-gradient(135deg, var(--info), #5a189a);">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">Borrowed "Clean Code" from Library</div>
-                        <div class="activity-time">2 days ago</div>
-                    </div>
-                </li>
-                <li class="activity-item">
-                    <div class="activity-icon" style="background: linear-gradient(135deg, var(--warning), #f3722c);">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">Reported Portal Issue</div>
-                        <div class="activity-time">3 days ago</div>
-                    </div>
-                </li>
-                <li class="activity-item">
-                    <div class="activity-icon" style="background: linear-gradient(135deg, var(--primary), var(--secondary));">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">Viewed Midterm Results</div>
-                        <div class="activity-time">1 week ago</div>
-                    </div>
-                </li>
-            `;
-
-        // Update enrollment status
-        document.getElementById("enrollmentStatus").textContent = "Active ✓";
-
-        // Animate new progress bars
-        setTimeout(() => {
-          const newBars = document.querySelectorAll(
-            ".progress-fill:not(.animate-progress)"
-          );
-          newBars.forEach((bar) => {
-            const width = bar.getAttribute("data-width");
-            bar.style.width = width + "%";
-            bar.classList.add("animate-progress");
-          });
-        }, 100);
+      function showAllIssues() {
+        alert('All issues functionality coming soon!');
       }
 
       // Start practice exam
@@ -1624,14 +1619,30 @@
         }, 5000);
       }
 
+      // Close modals when clicking outside
+      window.onclick = function(event) {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+          if (event.target === modal) {
+            modal.style.display = 'none';
+          }
+        });
+      }
+
       // Logout confirmation
-      document
-        .querySelector('a[href*="logout"]')
-        .addEventListener("click", function (e) {
+      document.querySelectorAll('a[href*="logout"]').forEach(link => {
+        link.addEventListener("click", function (e) {
           if (!confirm("Are you sure you want to logout?")) {
             e.preventDefault();
           }
         });
+      });
+
+      // Refresh dashboard data every 30 seconds
+      setInterval(() => {
+        // You can add AJAX calls here to refresh data
+        console.log('Dashboard refresh check...');
+      }, 30000);
     </script>
   </body>
 </html>
