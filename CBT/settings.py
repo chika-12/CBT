@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "users.apps.UsersConfig",
     "rest_framework",
-    "exam_management",
+    "teachers_users2_management",
+    "exams_management",
 ]
 
 MIDDLEWARE = [

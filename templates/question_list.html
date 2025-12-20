@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ test.subject }} - Questions{% endblock %}
+{% block page_title %}{{ test.subject }}{% endblock %}
+{% block page_subtitle %}Manage Questions{% endblock %}
+
+{% block header_actions %}
+<div class="d-flex gap-2">
+    <a href="{% url 'test_list' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Tests
+    </a>
+    {% if not test.is_published %}
+    <a href="{% url 'question_create' test.id %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Add Question
+    </a>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Description:</strong> {{ test.description }}</p>
+                <p><strong>Time Limit:</strong> {{ test.time_limit }} minutes</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Status:</strong> 
+                    <span class="badge bg-{% if test.is_published %}success{% else %}warning{% endif %}">
+                        {% if test.is_published %}Published{% else %}Draft{% endif %}
+                    </span>
+                </p>
+                <p><strong>Total Questions:</strong> {{ questions.count }}</p>
+                <p><strong>Total Marks:</strong> {{ questions|length|default:0 }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if questions %}
+<div class="list-group">
+    {% for question in questions %}
+    <div class="list-group-item question-card mb-3">
+        <div class="d-flex justify-content-between align-items-start">
+            <div class="flex-grow-1">
+                <div class="d-flex align-items-center mb-2">
+                    <span class="badge bg-info me-2">Q{{ forloop.counter }}</span>
+                    <span class="badge bg-{% if question.question_type == 'single' %}primary{% else %}secondary{% endif %} me-2">
+                        {{ question.question_type|title }} Choice
+                    </span>
+                    <span class="badge bg-dark">
+                        <i class="bi bi-star-fill"></i> {{ question.marks }} marks
+                    </span>
+                </div>
+                <h6 class="mb-2">{{ question.question_text }}</h6>
+                {% if question.explanation %}
+                <p class="text-muted mb-2"><small>Explanation: {{ question.explanation }}</small></p>
+                {% endif %}
+                <div class="mt-2">
+                    <a href="{% url 'choice_list' question.id %}" class="btn btn-sm btn-outline-info">
+                        <i class="bi bi-list-ul"></i> Choices ({{ question.choices.count }})
+                    </a>
+                    {% if not test.is_published %}
+                    <a href="{% url 'question_update' question.id %}" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                    <a href="{% url 'question_delete' question.id %}" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-trash"></i> Delete
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    <i class="bi bi-info-circle"></i> No questions added yet.
+    {% if not test.is_published %}
+    <a href="{% url 'question_create' test.id %}" class="alert-link">Add your first question</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Choice - Exam System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <i class="bi bi-exclamation-triangle"></i> Confirm Deletion
+            </div>
+            <div class="card-body">
+                <h5>Delete this choice?</h5>
+                <div class="alert alert-warning">
+                    <p class="mb-1"><strong>Choice:</strong> {{ choice.choice_text|truncatechars:150 }}</p>
+                    <p class="mb-0">
+                        <strong>Status:</strong> 
+                        <span class="badge {% if choice.is_correct %}bg-success{% else %}bg-secondary{% endif %}">
+                            {% if choice.is_correct %}Correct{% else %}Incorrect{% endif %}
+                        </span>
+                    </p>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'choice_list' choice.question.id %}" class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            Delete Choice
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

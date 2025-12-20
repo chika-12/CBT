@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ question.question_text|truncatechars:50 }} - Choices{% endblock %}
+{% block page_title %}Manage Choices{% endblock %}
+{% block page_subtitle %}{{ question.question_text|truncatechars:100 }}{% endblock %}
+
+{% block header_actions %}
+<div class="d-flex gap-2">
+    <a href="{% url 'question_list' question.test.id %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Questions
+    </a>
+    {% if not question.test.is_published %}
+    <a href="{% url 'choice_create' question.id %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Add Choice
+    </a>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-{% if question.question_type == 'single' %}primary{% else %}secondary{% endif %} me-2">
+                {{ question.question_type|title }} Choice
+            </span>
+            <span class="badge bg-dark me-2">{{ question.marks }} marks</span>
+            {% if question.test.is_published %}
+            <span class="badge bg-success">Published - Read Only</span>
+            {% endif %}
+        </div>
+        <h6>{{ question.question_text }}</h6>
+        {% if question.explanation %}
+        <p class="text-muted mt-2"><small><strong>Explanation:</strong> {{ question.explanation }}</small></p>
+        {% endif %}
+    </div>
+</div>
+
+<h5>Choices</h5>
+{% if choices %}
+<div class="list-group">
+    {% for choice in choices %}
+    <div class="list-group-item {% if choice.is_correct %}choice-correct{% endif %} mb-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <span class="badge {% if choice.is_correct %}bg-success{% else %}bg-secondary{% endif %} me-2">
+                    {% if choice.is_correct %}Correct{% else %}Incorrect{% endif %}
+                </span>
+                {{ choice.choice_text }}
+                <small class="text-muted d-block mt-1">Order: {{ choice.order }}</small>
+            </div>
+            {% if not question.test.is_published %}
+            <div class="btn-group">
+                <a href="{% url 'choice_update' choice.id %}" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-pencil"></i>
+                </a>
+                <a href="{% url 'choice_delete' choice.id %}" class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash"></i>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    <i class="bi bi-info-circle"></i> No choices added yet.
+    {% if not question.test.is_published %}
+    <a href="{% url 'choice_create' question.id %}" class="alert-link">Add your first choice</a>
+    {% endif %}
+</div>
+{% endif %}
+
+<div class="mt-4">
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle"></i>
+        <strong>Note:</strong> 
+        {% if question.question_type == 'single' %}
+        For Single Choice questions, only one choice can be marked as correct.
+        {% else %}
+        For Multiple Choice questions, you can mark multiple choices as correct.
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

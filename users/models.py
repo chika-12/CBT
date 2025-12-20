@@ -38,7 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
   first_name = models.CharField(max_length=230)
   last_name = models.CharField(max_length=230)
   email = models.EmailField(unique=True)
-  role = models.CharField(max_length=230, choices=STATUS_ROLE)
+  role = models.CharField(max_length=230, choices=STATUS_ROLE, default="user")
   is_active = models.BooleanField(default=True)
   date_added = models.DateField(auto_now=True)
 

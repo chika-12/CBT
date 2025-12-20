@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if test %}Edit Test{% else %}Create Test{% endif %} - Exam System{% endblock %}
+{% block page_title %}{% if test %}Edit Test{% else %}Create New Test{% endif %}{% endblock %}
+{% block page_subtitle %}{% if test %}Update your test details{% else %}Set up a new exam{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Subject *</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="subject" 
+                               name="subject" 
+                               value="{% if test %}{{ test.subject }}{% endif %}"
+                               required
+                               minlength="2">
+                        <div class="form-text">Minimum 2 characters required</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" 
+                                  id="description" 
+                                  name="description" 
+                                  rows="3">{% if test %}{{ test.description }}{% endif %}</textarea>
+                        <div class="form-text">Optional description for your test</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="time_limit" class="form-label">Time Limit (minutes) *</label>
+                        <input type="number" 
+                               class="form-control" 
+                               id="time_limit" 
+                               name="time_limit" 
+                               value="{% if test %}{{ test.time_limit }}{% else %}60{% endif %}"
+                               min="1" 
+                               max="480" 
+                               required>
+                        <div class="form-text">Must be between 1 and 480 minutes</div>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'test_list' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> {% if test %}Update Test{% else %}Create Test{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Form validation
+(function() {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+</script>
+{% endblock %}

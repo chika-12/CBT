@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Question - Exam System{% endblock %}
+{% block page_title %}Delete Question{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <i class="bi bi-exclamation-triangle"></i> Confirm Deletion
+            </div>
+            <div class="card-body">
+                <h5>Delete this question?</h5>
+                <div class="alert alert-warning">
+                    <p class="mb-1"><strong>Question:</strong> {{ question.question_text|truncatechars:150 }}</p>
+                    <p class="mb-0"><strong>Type:</strong> {{ question.question_type|title }} Choice</p>
+                    <p class="mb-0"><strong>Marks:</strong> {{ question.marks }}</p>
+                </div>
+                <p class="text-danger">
+                    <i class="bi bi-exclamation-circle"></i> 
+                    This will also delete {{ question.choices.count }} choice(s) associated with this question.
+                </p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'question_list' question.test.id %}" class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            Delete Question
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

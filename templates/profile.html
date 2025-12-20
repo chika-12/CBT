@@ -1019,6 +1019,26 @@
         </div>
       </div>
       {% endif %}
+
+      <!--Students dashboard-->
+
+      {% if profile.role == "student" %}
+      <div class="teacher-dashboard-section">
+        <div class="teacher-dashboard-content">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <h3>Welcome, Student!</h3>
+          <p>
+            You are logged in as a student. Click the button below to access the
+            Students Dashboard where you can take tests, and do more.
+          </p>
+
+          <a href="{% url 'students_dashboard' %}" class="teacher-btn">
+            <i class="fas fa-rocket" style="margin-right: 8px"></i>
+            Go students Dashboard
+          </a>
+        </div>
+      </div>
+      {% endif %}
     </div>
 
     <script>

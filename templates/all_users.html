@@ -1,0 +1,1580 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - User Management</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #4361ee;
+        --primary-light: #4895ef;
+        --secondary-color: #3a0ca3;
+        --success-color: #4cc9f0;
+        --danger-color: #f72585;
+        --warning-color: #f8961e;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+        --gray-color: #6c757d;
+        --light-gray: #e9ecef;
+        --border-radius: 12px;
+        --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        --transition: all 0.3s ease;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f5f7ff;
+        color: var(--dark-color);
+        line-height: 1.6;
+        padding: 0;
+        margin: 0;
+      }
+
+      /* Back to Dashboard Button */
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 500;
+        font-size: 0.95rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+      }
+
+      /* Button icon */
+      .btn-primary i {
+        font-size: 0.9rem;
+        transition: transform 0.3s ease;
+      }
+
+      /* Glow effect */
+      .btn-primary::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: 0.5s;
+      }
+
+      /* Hover effects */
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+      }
+
+      .btn-primary:hover i {
+        transform: translateX(-5px);
+      }
+
+      .btn-primary:hover::before {
+        left: 100%;
+      }
+
+      /* Active state */
+      .btn-primary:active {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
+
+      /* Focus state */
+      .btn-primary:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3),
+          0 8px 25px rgba(102, 126, 234, 0.4);
+      }
+
+      /* Button with glowing animation */
+      .btn-primary.glow {
+        animation: glowPulse 2s infinite;
+      }
+
+      @keyframes glowPulse {
+        0%,
+        100% {
+          box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        50% {
+          box-shadow: 0 5px 20px rgba(102, 126, 234, 0.6);
+        }
+      }
+
+      /* Button container */
+      .btn-container {
+        margin-bottom: 30px;
+        padding: 20px;
+        border-radius: 15px;
+        background: rgba(15, 23, 42, 0.3);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: inline-block;
+        transition: all 0.3s ease;
+      }
+
+      .btn-container:hover {
+        background: rgba(15, 23, 42, 0.5);
+        transform: translateY(-2px);
+      }
+
+      /* Alternative button styles */
+      .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 24px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 500;
+        font-size: 0.95rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .btn-danger {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+      }
+
+      .btn-danger:hover {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+      }
+
+      .btn-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+      }
+
+      .btn-success:hover {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+      }
+
+      /* Button sizes */
+      .btn-sm {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+      }
+
+      .btn-lg {
+        padding: 16px 32px;
+        font-size: 1.1rem;
+      }
+
+      .btn-xl {
+        padding: 20px 40px;
+        font-size: 1.2rem;
+      }
+
+      /* Button group */
+      .btn-group {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+      }
+
+      /* Floating button */
+      .btn-floating {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Loading state */
+      .btn-primary.loading {
+        position: relative;
+        color: transparent;
+      }
+
+      .btn-primary.loading::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        top: 50%;
+        left: 50%;
+        margin: -10px 0 0 -10px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: buttonSpin 0.8s linear infinite;
+      }
+
+      @keyframes buttonSpin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Disabled state */
+      .btn-primary:disabled,
+      .btn-primary.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+
+      .btn-primary:disabled:hover::before,
+      .btn-primary.disabled:hover::before {
+        left: -100%;
+      }
+
+      /* Responsive design */
+      @media (max-width: 768px) {
+        .btn-primary {
+          padding: 10px 20px;
+          font-size: 0.9rem;
+        }
+
+        .btn-container {
+          padding: 15px;
+          margin-bottom: 20px;
+        }
+
+        .btn-group {
+          gap: 10px;
+        }
+
+        .btn-floating {
+          bottom: 20px;
+          right: 20px;
+          width: 50px;
+          height: 50px;
+          font-size: 1rem;
+        }
+      }
+
+      /* Button with badge */
+      .btn-with-badge {
+        position: relative;
+      }
+
+      .btn-badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #ef4444;
+        color: white;
+        font-size: 0.7rem;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        border: 2px solid rgba(15, 23, 42, 0.95);
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Header Styles */
+      header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        padding: 1.5rem 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo-area {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        background: rgba(255, 255, 255, 0.2);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo-text h1 {
+        font-family: "Poppins", sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+
+      .logo-text p {
+        font-size: 0.85rem;
+        opacity: 0.9;
+      }
+
+      .admin-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .admin-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+
+      /* Main Content */
+      .main-content {
+        padding: 2rem 0 3rem;
+      }
+
+      .page-title {
+        font-family: "Poppins", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--dark-color);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .page-title i {
+        color: var(--primary-color);
+      }
+
+      /* Stats Cards */
+      .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .stat-card {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        box-shadow: var(--box-shadow);
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        transition: var(--transition);
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        color: white;
+      }
+
+      .stat-icon.total-users {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--primary-light)
+        );
+      }
+
+      .stat-icon.active-users {
+        background: linear-gradient(135deg, var(--success-color), #38b6ff);
+      }
+
+      .stat-icon.admins {
+        background: linear-gradient(135deg, var(--secondary-color), #560bad);
+      }
+
+      .stat-info h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--dark-color);
+        line-height: 1;
+      }
+
+      .stat-info p {
+        color: var(--gray-color);
+        font-size: 0.95rem;
+        margin-top: 5px;
+      }
+
+      /* Controls Section */
+      .controls-section {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        box-shadow: var(--box-shadow);
+        margin-bottom: 2rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .search-box {
+        position: relative;
+        flex-grow: 1;
+        max-width: 500px;
+      }
+
+      .search-box input {
+        width: 100%;
+        padding: 0.9rem 1rem 0.9rem 3rem;
+        border: 2px solid var(--light-gray);
+        border-radius: 50px;
+        font-family: "Inter", sans-serif;
+        font-size: 1rem;
+        transition: var(--transition);
+      }
+
+      .search-box input:focus {
+        outline: none;
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+      }
+
+      .search-box i {
+        position: absolute;
+        left: 1.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray-color);
+      }
+
+      .filter-options {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .filter-select {
+        padding: 0.9rem 1.2rem;
+        border: 2px solid var(--light-gray);
+        border-radius: 50px;
+        font-family: "Inter", sans-serif;
+        font-size: 0.95rem;
+        background: white;
+        color: var(--dark-color);
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .filter-select:focus {
+        outline: none;
+        border-color: var(--primary-light);
+      }
+
+      .btn-add-user {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--primary-light)
+        );
+        color: white;
+        border: none;
+        padding: 0.9rem 1.8rem;
+        border-radius: 50px;
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+      }
+
+      .btn-add-user:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(67, 97, 238, 0.2);
+      }
+
+      /* Users Grid */
+      .users-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.8rem;
+      }
+
+      .user-card {
+        background: white;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--box-shadow);
+        transition: var(--transition);
+        position: relative;
+      }
+
+      .user-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+      }
+
+      .user-header {
+        padding: 1.8rem 1.8rem 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        border-bottom: 1px solid var(--light-gray);
+      }
+
+      .user-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        color: white;
+        font-weight: 600;
+      }
+
+      .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .user-info h3 {
+        font-family: "Poppins", sans-serif;
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .user-email {
+        color: var(--gray-color);
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+        word-break: break-word;
+      }
+
+      .user-role {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .role-admin {
+        background-color: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+      }
+
+      .role-staff {
+        background-color: rgba(76, 201, 240, 0.1);
+        color: var(--success-color);
+      }
+
+      .role-user {
+        background-color: rgba(108, 117, 125, 0.1);
+        color: var(--gray-color);
+      }
+
+      .user-details {
+        padding: 1.5rem 1.8rem;
+      }
+
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+      }
+
+      .detail-label {
+        color: var(--gray-color);
+        font-size: 0.9rem;
+      }
+
+      .detail-value {
+        font-weight: 500;
+        color: var(--dark-color);
+      }
+
+      .status-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 500;
+      }
+
+      .status-indicator i {
+        font-size: 0.7rem;
+      }
+
+      .status-active {
+        color: #2ecc71;
+      }
+
+      .status-inactive {
+        color: #e74c3c;
+      }
+
+      .user-actions {
+        padding: 1rem 1.8rem 1.8rem;
+        display: flex;
+        gap: 10px;
+        border-top: 1px solid var(--light-gray);
+      }
+
+      .action-btn {
+        flex: 1;
+        padding: 0.7rem;
+        border-radius: 8px;
+        border: none;
+        font-family: "Inter", sans-serif;
+        font-weight: 500;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      .btn-edit {
+        background-color: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+      }
+
+      .btn-edit:hover {
+        background-color: rgba(67, 97, 238, 0.2);
+      }
+
+      .btn-delete {
+        background-color: rgba(247, 37, 133, 0.1);
+        color: var(--danger-color);
+      }
+
+      .btn-delete:hover {
+        background-color: rgba(247, 37, 133, 0.2);
+      }
+
+      /* Delete Confirmation Modal */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition);
+      }
+
+      .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        transform: translateY(-20px);
+        transition: var(--transition);
+      }
+
+      .modal-overlay.active .modal {
+        transform: translateY(0);
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 1.5rem;
+      }
+
+      .modal-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(247, 37, 133, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--danger-color);
+        font-size: 1.5rem;
+      }
+
+      .modal-header h3 {
+        font-family: "Poppins", sans-serif;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+
+      .modal-body {
+        margin-bottom: 2rem;
+      }
+
+      .modal-body p {
+        color: var(--gray-color);
+        line-height: 1.6;
+      }
+
+      .user-to-delete {
+        background: var(--light-gray);
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+      }
+
+      .user-to-delete h4 {
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .user-to-delete p {
+        color: var(--dark-color);
+        opacity: 0.8;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+      }
+
+      .modal-btn {
+        padding: 0.8rem 1.8rem;
+        border-radius: 8px;
+        border: none;
+        font-family: "Inter", sans-serif;
+        font-weight: 500;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .modal-btn-cancel {
+        background: var(--light-gray);
+        color: var(--dark-color);
+      }
+
+      .modal-btn-cancel:hover {
+        background: #d8d8d8;
+      }
+
+      .modal-btn-delete {
+        background: var(--danger-color);
+        color: white;
+      }
+
+      .modal-btn-delete:hover {
+        background: #e1156d;
+        transform: translateY(-2px);
+      }
+
+      /* Notification */
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 1rem 1.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 1001;
+        transform: translateX(150%);
+        transition: transform 0.4s ease;
+      }
+
+      .notification.show {
+        transform: translateX(0);
+      }
+
+      .notification-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+      }
+
+      .notification.success .notification-icon {
+        background: rgba(46, 204, 113, 0.1);
+        color: #2ecc71;
+      }
+
+      .notification.error .notification-icon {
+        background: rgba(231, 76, 60, 0.1);
+        color: #e74c3c;
+      }
+
+      .notification-content h4 {
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+
+      .notification-content p {
+        color: var(--gray-color);
+        font-size: 0.9rem;
+      }
+
+      /* Loading Spinner */
+      .spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 992px) {
+        .users-grid {
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        }
+
+        .controls-section {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .search-box {
+          max-width: 100%;
+        }
+
+        .filter-options {
+          justify-content: center;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .header-content {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+
+        .stats-container {
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+
+        .page-title {
+          font-size: 1.7rem;
+        }
+
+        .user-header {
+          flex-direction: column;
+          text-align: center;
+          gap: 1rem;
+        }
+
+        .modal-actions {
+          flex-direction: column;
+        }
+
+        .modal-btn {
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .users-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .filter-options {
+          flex-direction: column;
+        }
+
+        .filter-select {
+          width: 100%;
+        }
+
+        .user-actions {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="container header-content">
+        <div class="logo-area">
+          <div class="logo">
+            <i class="fas fa-users-cog"></i>
+          </div>
+          <div class="logo-text">
+            <h1>Admin Dashboard</h1>
+            <p>User Management System</p>
+          </div>
+        </div>
+        <div class="admin-info">
+          <div class="admin-avatar">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <div>
+            <h3>
+              {{ request.user.get_full_name|default:request.user.first_name }}
+            </h3>
+            <p>Administrator</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content container">
+      <!-- Page Title -->
+      <div class="page-title">
+        <i class="fas fa-users"></i>
+        <span>User Management</span>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-icon total-users">
+            <i class="fas fa-user-friends"></i>
+          </div>
+          <div class="stat-info">
+            <h3>{{ total_users }}</h3>
+            <p>Total Users</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon active-users">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <div class="stat-info">
+            <h3>{{ active_users }}</h3>
+            <p>Active Users</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon admins">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <div class="stat-info">
+            <h3>{{ admin_count }}</h3>
+            <p>Administrators</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls Section -->
+      <div class="controls-section">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search users by name, email, or role..."
+          />
+        </div>
+        <div class="filter-options">
+          <select class="filter-select" id="roleFilter">
+            <option value="all">All Roles</option>
+            <option value="admin">Administrator</option>
+            <option value="student">Student</option>
+            <option value="user">Regular User</option>
+            <option value="teacher">Teachers</option>
+          </select>
+          <select class="filter-select" id="statusFilter">
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <button class="btn-add-user">
+          <i class="fas fa-user-plus"></i>
+          Add New User
+        </button>
+      </div>
+
+      <!-- Users Grid -->
+      <div class="users-grid" id="usersGrid">
+        {% if users %} {% for user in users %}
+        <div
+          class="user-card"
+          data-user-id="{{ user.id }}"
+          data-role="{{ user.role }}"
+          data-status="{{ user.status }}"
+        >
+          <div class="user-header">
+            <div
+              class="user-avatar"
+              style="background: {{ user.avatar_color }};"
+            >
+              {{ user.initials }}
+            </div>
+            <div class="user-info">
+              <h3>{{ user.name }}</h3>
+              <p class="user-email">{{ user.email }}</p>
+              <span class="user-role role-{{ user.role }}"
+                >{{ user.role|title }}</span
+              >
+            </div>
+          </div>
+          <div class="user-details">
+            <!-- <div class="detail-row">
+              <span class="detail-label">Username:</span>
+              <span class="detail-value">{{ user.username }}</span>
+            </div> -->
+            <div class="detail-row">
+              <span class="detail-label">Joined:</span>
+              <span class="detail-value">{{ user.join_date }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Last Login:</span>
+              <span class="detail-value">{{ user.last_login }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Status:</span>
+              <span class="detail-value">
+                <span
+                  class="status-indicator {% if user.status == 'active' %}status-active{% else %}status-inactive{% endif %}"
+                >
+                  <i class="fas fa-circle"></i> {{ user.status|title }}
+                </span>
+              </span>
+            </div>
+          </div>
+          <div class="user-actions">
+            <button class="action-btn btn-edit">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+            <button
+              class="action-btn btn-delete"
+              onclick="openDeleteModal('{{ user.id }}', '{{ user.name|escapejs }}', '{{ user.email|escapejs }}')"
+            >
+              <i class="fas fa-trash-alt"></i> Delete
+            </button>
+          </div>
+        </div>
+        {% endfor %} {% else %}
+        <div
+          style="
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: var(--border-radius);
+          "
+        >
+          <i
+            class="fas fa-user-slash"
+            style="
+              font-size: 4rem;
+              color: var(--light-gray);
+              margin-bottom: 1rem;
+            "
+          ></i>
+          <h3>No Users Found</h3>
+          <p style="color: var(--gray-color)">
+            There are no users in the database yet.
+          </p>
+        </div>
+        {% endif %}
+      </div>
+    </main>
+
+    <div>
+      <a href="{% url 'admin_dashboard' %}" class="btn btn-primary">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <p>&copy; 2023 Admin Dashboard. All rights reserved.</p>
+        <p style="margin-top: 5px; font-size: 0.9rem">
+          User Management System v2.1
+        </p>
+      </div>
+    </footer>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <h3>Delete User</h3>
+        </div>
+        <div class="modal-body">
+          <p>
+            Are you sure you want to delete this user? This action cannot be
+            undone.
+          </p>
+          <div class="user-to-delete">
+            <h4 id="deleteUserName"></h4>
+            <p id="deleteUserEmail"></p>
+          </div>
+          <p>
+            All user data, including posts, comments, and preferences will be
+            permanently deleted.
+          </p>
+        </div>
+        <div class="modal-actions">
+          <button
+            class="modal-btn modal-btn-cancel"
+            onclick="closeDeleteModal()"
+          >
+            Cancel
+          </button>
+          <button
+            class="modal-btn modal-btn-delete"
+            onclick="deleteUser()"
+            id="confirmDeleteBtn"
+          >
+            <span id="deleteBtnText">Delete User</span>
+            <span id="deleteBtnSpinner" style="display: none"
+              ><div class="spinner"></div
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+      <div class="notification-icon">
+        <i class="fas fa-check"></i>
+      </div>
+      <div class="notification-content">
+        <h4 id="notificationTitle">Success</h4>
+        <p id="notificationMessage">User deleted successfully</p>
+      </div>
+    </div>
+
+    <!-- Django Messages Display -->
+    {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+      <div
+        class="notification {% if message.tags %}{{ message.tags }}{% endif %} show"
+        style="top: 80px"
+      >
+        <div class="notification-icon">
+          {% if message.tags == 'success' %}
+          <i class="fas fa-check-circle"></i>
+          {% elif message.tags == 'error' %}
+          <i class="fas fa-exclamation-circle"></i>
+          {% else %}
+          <i class="fas fa-info-circle"></i>
+          {% endif %}
+        </div>
+        <div class="notification-content">
+          <h4>{{ message.tags|title }}</h4>
+          <p>{{ message }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <script>
+      // Global variables
+      let userToDelete = null;
+
+      // Function to open delete confirmation modal
+      window.openDeleteModal = function (userId, userName, userEmail) {
+        console.log("Opening delete modal for user ID:", userId); // Debug log
+        userToDelete = userId;
+
+        // Set user info in modal
+        document.getElementById("deleteUserName").textContent = userName;
+        document.getElementById("deleteUserEmail").textContent = userEmail;
+
+        // Show modal
+        document.getElementById("deleteModal").classList.add("active");
+      };
+
+      // Function to close delete modal
+      function closeDeleteModal() {
+        document.getElementById("deleteModal").classList.remove("active");
+        userToDelete = null;
+      }
+
+      // Function to get CSRF token
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+          const cookies = document.cookie.split(";");
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === name + "=") {
+              cookieValue = decodeURIComponent(
+                cookie.substring(name.length + 1)
+              );
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+
+      // Function to delete user via AJAX
+      function deleteUser() {
+        if (!userToDelete) {
+          console.error("No user ID to delete");
+          showNotification("Error", "No user selected for deletion.", "error");
+          return;
+        }
+
+        const deleteBtn = document.getElementById("confirmDeleteBtn");
+        const deleteBtnText = document.getElementById("deleteBtnText");
+        const deleteBtnSpinner = document.getElementById("deleteBtnSpinner");
+
+        // Show loading spinner
+        deleteBtnText.style.display = "none";
+        deleteBtnSpinner.style.display = "inline-block";
+        deleteBtn.disabled = true;
+
+        // Get CSRF token
+        const csrfToken = getCookie("csrftoken");
+
+        if (!csrfToken) {
+          console.error("CSRF token not found");
+          showNotification(
+            "Error",
+            "Security token not found. Please refresh the page.",
+            "error"
+          );
+          deleteBtnText.style.display = "inline";
+          deleteBtnSpinner.style.display = "none";
+          deleteBtn.disabled = false;
+          closeDeleteModal();
+          return;
+        }
+
+        console.log("Deleting user ID:", userToDelete); // Debug log
+
+        // Make AJAX request to delete user
+        fetch(`/api/exams/system/delete-user/${userToDelete}/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+            "X-Requested-With": "XMLHttpRequest",
+          },
+          body: JSON.stringify({}), // Empty JSON body
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Delete response:", data); // Debug log
+            if (data.success) {
+              // Remove user card from DOM
+              const userCard = document.querySelector(
+                `[data-user-id="${userToDelete}"]`
+              );
+              if (userCard) {
+                userCard.style.transform = "scale(0.9)";
+                userCard.style.opacity = "0.5";
+                setTimeout(() => {
+                  userCard.remove();
+
+                  // Update stats if they exist
+                  const totalUsersElement = document.querySelector(
+                    ".stat-card:nth-child(1) h3"
+                  );
+                  if (totalUsersElement) {
+                    const currentTotal = parseInt(
+                      totalUsersElement.textContent
+                    );
+                    totalUsersElement.textContent = currentTotal - 1;
+                  }
+
+                  // Check if no users left
+                  const usersGrid = document.getElementById("usersGrid");
+                  const userCards = usersGrid.querySelectorAll(".user-card");
+                  if (userCards.length === 0) {
+                    usersGrid.innerHTML = `
+                  <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: white; border-radius: var(--border-radius);">
+                    <i class="fas fa-user-slash" style="font-size: 4rem; color: var(--light-gray); margin-bottom: 1rem;"></i>
+                    <h3>No Users Found</h3>
+                    <p style="color: var(--gray-color);">There are no users in the database yet.</p>
+                  </div>
+                `;
+                  }
+                }, 300);
+              }
+
+              // Show success notification
+              showNotification(
+                "User Deleted",
+                "User has been successfully deleted.",
+                "success"
+              );
+            } else {
+              // Show error notification
+              showNotification(
+                "Error",
+                data.message || "Failed to delete user.",
+                "error"
+              );
+            }
+
+            // Close modal
+            closeDeleteModal();
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            showNotification(
+              "Error",
+              "An error occurred while deleting the user: " + error.message,
+              "error"
+            );
+            closeDeleteModal();
+          })
+          .finally(() => {
+            // Reset delete button
+            deleteBtnText.style.display = "inline";
+            deleteBtnSpinner.style.display = "none";
+            deleteBtn.disabled = false;
+          });
+      }
+
+      // Function to show notification
+      function showNotification(title, message, type = "success") {
+        const notification = document.getElementById("notification");
+        const notificationTitle = document.getElementById("notificationTitle");
+        const notificationMessage = document.getElementById(
+          "notificationMessage"
+        );
+        const notificationIcon = notification.querySelector(
+          ".notification-icon i"
+        );
+
+        // Set notification content
+        notificationTitle.textContent = title;
+        notificationMessage.textContent = message;
+
+        // Set notification type
+        notification.className = "notification " + type;
+
+        // Change icon based on type
+        if (type === "success") {
+          notificationIcon.className = "fas fa-check";
+        } else {
+          notificationIcon.className = "fas fa-exclamation-circle";
+        }
+
+        // Show notification
+        notification.classList.add("show");
+
+        // Hide notification after 5 seconds
+        setTimeout(() => {
+          notification.classList.remove("show");
+        }, 5000);
+      }
+
+      // Search functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("searchInput");
+        const userCards = document.querySelectorAll(".user-card");
+
+        // Debug: Check user IDs
+        userCards.forEach((card, index) => {
+          const userId = card.getAttribute("data-user-id");
+          console.log(`Card ${index} user ID:`, userId);
+        });
+
+        searchInput.addEventListener("input", function () {
+          const searchTerm = this.value.toLowerCase();
+
+          userCards.forEach((card) => {
+            const userName = card.querySelector("h3").textContent.toLowerCase();
+            const userEmail = card
+              .querySelector(".user-email")
+              .textContent.toLowerCase();
+            const userRole = card
+              .querySelector(".user-role")
+              .textContent.toLowerCase();
+
+            if (
+              userName.includes(searchTerm) ||
+              userEmail.includes(searchTerm) ||
+              userRole.includes(searchTerm)
+            ) {
+              card.style.display = "block";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        });
+
+        // Filter by role
+        const roleFilter = document.getElementById("roleFilter");
+        roleFilter.addEventListener("change", function () {
+          const selectedRole = this.value;
+
+          userCards.forEach((card) => {
+            const userRole = card.getAttribute("data-role");
+
+            if (selectedRole === "all" || userRole === selectedRole) {
+              card.style.display = "block";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        });
+
+        // Filter by status
+        const statusFilter = document.getElementById("statusFilter");
+        statusFilter.addEventListener("change", function () {
+          const selectedStatus = this.value;
+
+          userCards.forEach((card) => {
+            const userStatus = card.getAttribute("data-status");
+
+            if (selectedStatus === "all" || userStatus === selectedStatus) {
+              card.style.display = "block";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        });
+
+        // Close modal when clicking outside
+        document
+          .getElementById("deleteModal")
+          .addEventListener("click", function (e) {
+            if (e.target === this) {
+              closeDeleteModal();
+            }
+          });
+
+        // Close modal with ESC key
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") {
+            closeDeleteModal();
+          }
+        });
+
+        // Auto-hide Django messages after 5 seconds
+        setTimeout(() => {
+          const messageNotifications = document.querySelectorAll(
+            ".messages-container .notification"
+          );
+          messageNotifications.forEach((notification) => {
+            notification.classList.remove("show");
+          });
+        }, 5000);
+      });
+    </script>
+
+    <!-- Add CSRF token input -->
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+  </body>
+</html>

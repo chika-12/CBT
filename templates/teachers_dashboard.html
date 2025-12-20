@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Karmo Development Center</title>
+    <title>Karmo Development Center - Teacher Dashboard</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -933,20 +933,14 @@
                 <i class="fas fa-book"></i>
                 <span>
                   {% if teacher.subject %} Subject: {{ teacher.subject }}
-                  <!--html-->
                   {% else %} Subject: Not specified {% endif %}
                 </span>
               </div>
               <div class="meta-badge">
                 <i class="fas fa-calendar-alt"></i>
                 <span>
-                  {% if teacher.school_year %} Academic Year:
-                  <!--This is a tag-->
-                  {{ teacher.school_year }}
-                  <!--This is a tag-->
-                  {% else %} Academic Year: {{ current_year }}
-                  <!--This is a tag-->
-                  {% endif %}
+                  {% if teacher.school_year %} Academic Year: {{ teacher.school_year }}
+                  {% else %} Academic Year: {{ current_year }} {% endif %}
                 </span>
               </div>
               <div class="meta-badge">
@@ -999,8 +993,8 @@
           <div class="stat-content">
             <h3>Total Tests</h3>
             <div class="stat-value">
-              {% if teacher.test_set.count %} {{ teacher.test_set.count }} {%
-              else %} 0 {% endif %}
+              {% if teacher.test_set.count %} {{ teacher.test_set.count }}
+              {% else %} 0 {% endif %}
             </div>
             <div class="stat-trend trend-up">
               <i class="fas fa-arrow-up"></i>
@@ -1040,8 +1034,8 @@
           <div class="stat-content">
             <h3>Average Score</h3>
             <div class="stat-value">
-              {% if teacher.average_score %} {{ teacher.average_score }}% {%
-              else %} 0% {% endif %}
+              {% if teacher.average_score %} {{ teacher.average_score }}%
+              {% else %} 0% {% endif %}
             </div>
             <div class="stat-trend trend-up">
               <i class="fas fa-arrow-up"></i>
@@ -1060,8 +1054,8 @@
           <div class="stat-content">
             <h3>Pending Reviews</h3>
             <div class="stat-value">
-              {% if teacher.pending_reviews %} {{ teacher.pending_reviews }} {%
-              else %} 0 {% endif %}
+              {% if teacher.pending_reviews %} {{ teacher.pending_reviews }}
+              {% else %} 0 {% endif %}
             </div>
             <div class="stat-trend trend-down">
               <i class="fas fa-arrow-down"></i>
@@ -1081,11 +1075,8 @@
         </div>
 
         <div class="actions-grid">
-          <a
-            href="#"
-            class="action-card"
-            onclick="showComingSoon('Create Test')"
-          >
+          <!-- CREATE NEW TEST -->
+          <a href="{% url 'test_create' %}" class="action-card">
             <div class="action-icon">
               <i class="fas fa-plus"></i>
             </div>
@@ -1093,23 +1084,19 @@
             <p>Design a new assessment with multiple question types</p>
           </a>
 
-          <a
-            href="#"
-            class="action-card"
-            onclick="showComingSoon('Manage Tests')"
-          >
+          <!-- VIEW ALL TESTS -->
+          <a href="{% url 'test_list' %}" class="action-card">
             <div class="action-icon">
-              <i class="fas fa-clipboard-check"></i>
+              <i class="fas fa-clipboard-list"></i>
             </div>
             <h3>Manage Tests</h3>
-            <p>View, edit, and publish your existing tests</p>
+            <p>View, edit, publish, and delete your tests</p>
           </a>
 
-          <a
-            href="#"
-            class="action-card"
-            onclick="showComingSoon('View Results')"
-          >
+          <!-- For individual test actions, we'll show in test cards below -->
+
+          <!-- VIEW RESULTS (Placeholder) -->
+          <a href="#" class="action-card" onclick="showComingSoon('View Results')">
             <div class="action-icon">
               <i class="fas fa-chart-bar"></i>
             </div>
@@ -1117,23 +1104,17 @@
             <p>Analyze student performance and statistics</p>
           </a>
 
-          <a
-            href="#"
-            class="action-card"
-            onclick="showComingSoon('Add Questions')"
-          >
+          <!-- QUESTION BANK (Placeholder) -->
+          <a href="#" class="action-card" onclick="showComingSoon('Question Bank')">
             <div class="action-icon">
               <i class="fas fa-question-circle"></i>
             </div>
-            <h3>Add Questions</h3>
+            <h3>Question Bank</h3>
             <p>Create question bank for future tests</p>
           </a>
 
-          <a
-            href="#"
-            class="action-card"
-            onclick="showComingSoon('Student Progress')"
-          >
+          <!-- STUDENT PROGRESS (Placeholder) -->
+          <a href="#" class="action-card" onclick="showComingSoon('Student Progress')">
             <div class="action-icon">
               <i class="fas fa-user-graduate"></i>
             </div>
@@ -1141,6 +1122,7 @@
             <p>Track individual student performance</p>
           </a>
 
+          <!-- SETTINGS (Placeholder) -->
           <a href="#" class="action-card" onclick="showComingSoon('Settings')">
             <div class="action-icon">
               <i class="fas fa-cog"></i>
@@ -1152,14 +1134,7 @@
       </section>
 
       <!-- Two Column Layout -->
-      <div
-        style="
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 40px;
-          margin-bottom: 40px;
-        "
-      >
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px;">
         <!-- Recent Activity -->
         <section class="activity-section">
           <div class="section-header">
@@ -1192,86 +1167,103 @@
               Your recent activities will appear here once you start using the
               dashboard.
             </p>
+            <a href="{% url 'test_create' %}" class="btn btn-primary">
+              <i class="fas fa-plus"></i>
+              Create Your First Test
+            </a>
           </div>
           {% endif %}
         </section>
 
-        <!-- Upcoming Tests -->
+        <!-- Recent Tests -->
         <section>
           <div class="section-header">
-            <h2><i class="fas fa-calendar-alt"></i> Upcoming Tests</h2>
+            <h2><i class="fas fa-clipboard-check"></i> Recent Tests</h2>
+            <a href="{% url 'test_list' %}" class="btn btn-outline" style="font-size: 0.9rem;">
+              <i class="fas fa-eye"></i> View All
+            </a>
           </div>
 
-          {% if teacher and teacher.upcoming_tests %}
+          {% if tests and tests.count > 0 %}
           <div class="tests-grid" style="grid-template-columns: 1fr">
-            {% for test in teacher.upcoming_tests %}
+            {% for test in tests|slice:":3" %}
             <div class="test-card">
               <div class="test-header">
                 <div class="test-subject">{{ test.subject }}</div>
-                <div class="test-status status-{{ test.status }}">
-                  {{ test.status|title }}
+                <div class="test-status status-{% if test.is_published %}published{% else %}draft{% endif %}">
+                  {% if test.is_published %}Published{% else %}Draft{% endif %}
                 </div>
               </div>
 
               <div class="test-meta">
                 <div class="test-meta-item">
                   <i class="far fa-calendar"></i>
-                  <span>Due: {{ test.due_date }}</span>
+                  <span>Created: {{ test.date_added|date:"M d, Y" }}</span>
                 </div>
                 <div class="test-meta-item">
                   <i class="far fa-clock"></i>
-                  <span>{{ test.duration }} minutes</span>
+                  <span>{{ test.time_limit }} minutes</span>
                 </div>
                 <div class="test-meta-item">
                   <i class="fas fa-question-circle"></i>
-                  <span>{{ test.question_count }} questions</span>
+                  <span>{{ test.questions.count }} questions</span>
                 </div>
               </div>
 
               <div class="test-progress">
                 <div class="progress-label">
-                  <span>Completion Rate</span>
-                  <span>{{ test.completion_rate }}%</span>
+                  <span>Status</span>
+                  <span>
+                    {% if test.is_published %}Ready for students{% else %}In draft{% endif %}
+                  </span>
                 </div>
                 <div class="progress-bar">
-                  <div
-                    class="progress-fill"
-                    style="width: {{ test.completion_rate }}%"
-                  ></div>
+                  <div class="progress-fill" style="width: {% if test.is_published %}100{% else %}50{% endif %}%"></div>
                 </div>
               </div>
 
               <div class="test-actions">
-                <a
-                  href="#"
-                  class="btn btn-primary"
-                  onclick="showComingSoon('View Results')"
-                >
-                  <i class="fas fa-chart-bar"></i>
-                  View Results
+                <!-- Manage Questions -->
+                <a href="{% url 'question_list' test.id %}" class="btn btn-primary">
+                  <i class="fas fa-list-check"></i>
+                  Questions
                 </a>
-                <a
-                  href="#"
-                  class="btn btn-outline"
-                  onclick="showComingSoon('Edit Test')"
-                >
+                
+                <!-- Edit Test -->
+                <a href="{% url 'test_update' test.id %}" class="btn btn-outline">
                   <i class="fas fa-edit"></i>
                   Edit
                 </a>
+                
+                <!-- Publish/Unpublish -->
+                <form method="post" action="{% url 'test_publish' test.id %}" style="display: inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn {% if test.is_published %}btn-outline{% else %}btn-primary{% endif %}" 
+                          style="border: none; font-family: inherit; font-size: inherit;">
+                    <i class="fas fa-{% if test.is_published %}times{% else %}check{% endif %}-circle"></i>
+                    {% if test.is_published %}Unpublish{% else %}Publish{% endif %}
+                  </button>
+                </form>
               </div>
             </div>
             {% endfor %}
           </div>
+          
+          {% if tests.count > 3 %}
+          <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'test_list' %}" class="btn btn-outline">
+              <i class="fas fa-arrow-right"></i>
+              View All {{ tests.count }} Tests
+            </a>
+          </div>
+          {% endif %}
+          
           {% else %}
           <div class="empty-state">
-            <i class="fas fa-calendar-alt"></i>
-            <h3>No Upcoming Tests</h3>
+            <i class="fas fa-clipboard-list"></i>
+            <h3>No Tests Created</h3>
             <p>Create your first test to start assessing your students.</p>
-            <a
-              href="#"
-              class="btn btn-primary"
-              onclick="showComingSoon('Create Test')"
-            >
+            <a href="{% url 'test_create' %}" class="btn btn-primary">
               <i class="fas fa-plus"></i>
               Create First Test
             </a>
@@ -1287,91 +1279,24 @@
 
         <div class="footer-links">
           <a href="#" onclick="showComingSoon('Help Center')">Help Center</a>
-          <a href="#" onclick="showComingSoon('Documentation')"
-            >Documentation</a
-          >
-          <a href="#" onclick="showComingSoon('Contact Support')"
-            >Contact Support</a
-          >
+          <a href="#" onclick="showComingSoon('Documentation')">Documentation</a>
+          <a href="#" onclick="showComingSoon('Contact Support')">Contact Support</a>
           <a href="{% url 'logout' %}">Logout</a>
         </div>
       </footer>
     </div>
 
     <!-- Coming Soon Modal -->
-    <div
-      id="comingSoonModal"
-      style="
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        z-index: 1000;
-        align-items: center;
-        justify-content: center;
-      "
-    >
-      <div
-        style="
-          background: white;
-          padding: 40px;
-          border-radius: 20px;
-          max-width: 500px;
-          width: 90%;
-          text-align: center;
-          animation: modalSlide 0.3s ease;
-        "
-      >
-        <div
-          style="
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(
-              135deg,
-              var(--primary),
-              var(--secondary)
-            );
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-          "
-        >
+    <div id="comingSoonModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; align-items: center; justify-content: center;">
+      <div style="background: white; padding: 40px; border-radius: 20px; max-width: 500px; width: 90%; text-align: center; animation: modalSlide 0.3s ease;">
+        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
           <i class="fas fa-tools" style="font-size: 36px; color: white"></i>
         </div>
-        <h2
-          style="
-            font-family: 'Poppins', sans-serif;
-            margin-bottom: 10px;
-            color: var(--dark);
-          "
-          id="modalTitle"
-        ></h2>
+        <h2 style="font-family: 'Poppins', sans-serif; margin-bottom: 10px; color: var(--dark);" id="modalTitle"></h2>
         <p style="color: var(--gray); margin-bottom: 25px">
-          This feature is currently under development and will be available
-          soon!
+          This feature is currently under development and will be available soon!
         </p>
-        <button
-          onclick="closeComingSoon()"
-          style="
-            background: linear-gradient(
-              135deg,
-              var(--primary),
-              var(--secondary)
-            );
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 1rem;
-          "
-        >
+        <button onclick="closeComingSoon()" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem;">
           Got it!
         </button>
       </div>
@@ -1481,6 +1406,16 @@
               }, 200);
           });
       }
+
+      // Confirm before publishing/unpublishing
+      document.querySelectorAll('form[action*="publish"] button').forEach(button => {
+          button.addEventListener('click', function(e) {
+              const action = this.innerHTML.includes('Publish') ? 'publish' : 'unpublish';
+              if (!confirm(`Are you sure you want to ${action} this test?`)) {
+                  e.preventDefault();
+              }
+          });
+      });
 
       @keyframes modalSlide {
           from {

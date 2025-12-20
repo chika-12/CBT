@@ -252,6 +252,57 @@
         overflow: hidden;
       }
 
+      .messages-container {
+        padding: 25px 40px 0;
+        animation: fadeIn 0.5s ease;
+      }
+
+      .message {
+        padding: 18px 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-weight: 500;
+        border-left: 4px solid;
+        animation: slideInRight 0.5s ease;
+      }
+
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .message.success {
+        background: var(--success-light);
+        color: #065f46;
+        border-left-color: var(--success);
+      }
+
+      .message.error {
+        background: var(--danger-light);
+        color: #991b1b;
+        border-left-color: var(--danger);
+      }
+
+      .message.info {
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        border-left-color: var(--primary);
+      }
+
+      .message i {
+        font-size: 20px;
+        flex-shrink: 0;
+      }
+
       .stat-card:hover {
         transform: translateY(-5px);
         box-shadow: var(--shadow-hover);
@@ -832,6 +883,24 @@
         </div>
       </header>
 
+      <!-- Messages -->
+      {% if messages %}
+      <div class="messages-container">
+        {% for message in messages %}
+        <div class="message {{ message.tags }}">
+          {% if message.tags == 'success' %}
+          <i class="fas fa-check-circle"></i>
+          {% elif message.tags == 'error' %}
+          <i class="fas fa-exclamation-circle"></i>
+          {% else %}
+          <i class="fas fa-info-circle"></i>
+          {% endif %}
+          <span>{{ message }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
       <!-- Statistics Cards -->
       <div class="stats-grid">
         <div class="stat-card">
@@ -974,6 +1043,14 @@
             </div>
             <h3>Update Teacher</h3>
             <p>Modify teacher profiles and permissions</p>
+          </a>
+
+          <a href="{% url 'add_student' %}" class="dashboard-card">
+            <div class="card-icon">
+              <i class="fas fa-user-edit"></i>
+            </div>
+            <h3>Add students</h3>
+            <p>Add students to students database</p>
           </a>
 
           <a href="{% url 'add_teacher' %}" class="dashboard-card">

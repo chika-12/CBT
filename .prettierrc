@@ -1,0 +1,7 @@
+{
+  "htmlWhitespaceSensitivity": "ignore"
+}
+
+"[django-html]": {
+  "editor.defaultFormatter": null
+}
