@@ -11,6 +11,14 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+#from decouple import config
+from dotenv import load_dotenv
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,7 +48,10 @@ INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "rest_framework",
     "teachers_users2_management",
-    "exams_management",
+    "library",
+    "cloudinary",
+    "cloudinary_storage",
+    "exams_management"
 ]
 
 MIDDLEWARE = [
@@ -121,9 +132,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-import os
-
-BASE_DIR = Path(__file__).resolve().parent.parent
+#BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
@@ -133,3 +142,52 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.User"
+
+# Cloudinary configuration
+CLOUDINARY_CLOUD_NAME = os.getenv('CLOUDINARY_CLOUD_NAME')
+CLOUDINARY_API_KEY = os.getenv('CLOUDINARY_API_KEY')
+CLOUDINARY_API_SECRET = os.getenv('CLOUDINARY_API_SECRET')
+CLOUDINARY_SECURE = os.getenv('CLOUDINARY_SECURE', 'True').lower() in ('true', '1', 't', 'yes')
+
+# Debug: Print what we're getting (remove in production)
+#print(f"Cloudinary Cloud Name: {CLOUDINARY_CLOUD_NAME}")
+#print(f"Cloudinary API Key: {CLOUDINARY_API_KEY[:5]}...")  # Only show first 5 chars
+#print(f"Cloudinary Secret exists: {bool(CLOUDINARY_API_SECRET)}")
+
+# Check if all Cloudinary credentials are provided
+CLOUDINARY_CONFIGURED = all([
+    CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET
+])
+
+if CLOUDINARY_CONFIGURED:
+    import cloudinary
+    import cloudinary.uploader
+    import cloudinary.api
+    
+    # Cloudinary storage configuration
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': CLOUDINARY_CLOUD_NAME,
+        'API_KEY': CLOUDINARY_API_KEY,
+        'API_SECRET': CLOUDINARY_API_SECRET,
+        'SECURE': CLOUDINARY_SECURE,
+    }
+    
+    # Initialize Cloudinary SDK
+    cloudinary.config(
+        cloud_name=CLOUDINARY_CLOUD_NAME,
+        api_key=CLOUDINARY_API_KEY,
+        api_secret=CLOUDINARY_API_SECRET,
+        secure=CLOUDINARY_SECURE
+    )
+    
+    # Use Cloudinary for media files
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    
+    print(f"✅ Cloudinary configured successfully for: {CLOUDINARY_CLOUD_NAME}")
+else:
+    # Fallback to local storage
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    print("⚠️ Cloudinary not fully configured. Using local file storage.")
+    print("   Please ensure .env file exists with:")
