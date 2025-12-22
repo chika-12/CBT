@@ -1,0 +1,581 @@
+{% extends 'book_base.html' %}
+
+{% block title %}Add New Book - BookHub{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Add Book Specific Styles */
+    .form-container {
+        max-width: 800px;
+        margin: 2rem auto;
+    }
+
+    .form-header {
+        background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+        color: white;
+        padding: 2.5rem;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+        text-align: center;
+    }
+
+    .form-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-header p {
+        opacity: 0.9;
+    }
+
+    .form-body {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+        box-shadow: var(--box-shadow);
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--primary-color);
+        text-decoration: none;
+        margin-bottom: 1.5rem;
+        transition: var(--transition);
+    }
+
+    .back-link:hover {
+        color: var(--secondary-color);
+        transform: translateX(-5px);
+    }
+
+    .book-form {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--dark-color);
+    }
+
+    .form-group.required label::after {
+        content: " *";
+        color: var(--danger-color);
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: var(--transition);
+        background: #f8f9fa;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+
+    .form-control.textarea {
+        min-height: 150px;
+        resize: vertical;
+    }
+
+    .form-control.file-input {
+        padding: 0.5rem;
+        cursor: pointer;
+    }
+
+    .form-control.file-input::-webkit-file-upload-button {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-right: 1rem;
+    }
+
+    .form-control.file-input::-webkit-file-upload-button:hover {
+        background: var(--secondary-color);
+    }
+
+    .form-errors {
+        color: var(--danger-color);
+        font-size: 0.9rem;
+        margin-top: 0.3rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .form-errors ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    .form-errors li {
+        list-style-type: none;
+        margin-bottom: 5px;
+    }
+
+    .form-errors i {
+        font-size: 1rem;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .btn-submit {
+        background: linear-gradient(45deg, var(--success-color), #27ae60);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(46, 204, 113, 0.3);
+    }
+
+    .btn-cancel {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+    .btn-cancel:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+    }
+
+    .help-text {
+        font-size: 0.85rem;
+        color: var(--gray-color);
+        margin-top: 0.3rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .preview-image {
+        width: 200px;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-top: 0.5rem;
+        border: 2px solid #e0e0e0;
+        display: none;
+    }
+
+    .preview-image.visible {
+        display: block;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .form-container {
+            margin: 1rem;
+        }
+        
+        .form-header {
+            padding: 2rem 1.5rem;
+        }
+        
+        .form-header h1 {
+            font-size: 2rem;
+        }
+        
+        .form-body {
+            padding: 1.5rem;
+        }
+        
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+        
+        .form-actions {
+            flex-direction: column;
+        }
+        
+        .btn-submit,
+        .btn-cancel {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="form-container">
+        <div class="form-header">
+            <h1><i class="fas fa-book-medical"></i> Add New Book</h1>
+            <p>Fill in the details below to add a new book to our library</p>
+        </div>
+        
+        <div class="form-body">
+            <a href="{% url 'book-list' %}" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Book List
+            </a>
+            
+            <!-- Display general form errors -->
+            {% if form.errors %}
+            <div class="message alert-error" style="margin-bottom: 2rem;">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>Please correct the errors below.</span>
+            </div>
+            {% endif %}
+            
+            <form method="POST" enctype="multipart/form-data" class="book-form" id="bookForm">
+                {% csrf_token %}
+                
+                <!-- General form errors -->
+                {% if form.non_field_errors %}
+                <div class="form-errors">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+                
+                <!-- Title -->
+                <div class="form-group required">
+                    <label for="id_title">Book Title</label>
+                    <input type="text" name="title" id="id_title" class="form-control" 
+                           value="{{ form.title.value|default:'' }}" required>
+                    {% if form.title.errors %}
+                    <div class="form-errors">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ form.title.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Author -->
+                <div class="form-group required">
+                    <label for="id_author">Author</label>
+                    <input type="text" name="author" id="id_author" class="form-control" 
+                           value="{{ form.author.value|default:'' }}" required>
+                    {% if form.author.errors %}
+                    <div class="form-errors">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ form.author.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Row for multiple fields -->
+                <div class="form-row">
+                    <!-- ISBN -->
+                    <div class="form-group">
+                        <label for="id_isbn">ISBN</label>
+                        <input type="text" name="isbn" id="id_isbn" class="form-control" 
+                               value="{{ form.isbn.value|default:'' }}">
+                        {% if form.isbn.errors %}
+                        <div class="form-errors">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ form.isbn.errors }}
+                        </div>
+                        {% endif %}
+                        <div class="help-text">
+                            <i class="fas fa-info-circle"></i> 13-digit ISBN number
+                        </div>
+                    </div>
+                    
+                    <!-- Genre -->
+                    <div class="form-group">
+                        <label for="id_genre">Genre</label>
+                        <input type="text" name="genre" id="id_genre" class="form-control" 
+                               value="{{ form.genre.value|default:'' }}">
+                        {% if form.genre.errors %}
+                        <div class="form-errors">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ form.genre.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Row for multiple fields -->
+                <div class="form-row">
+                    <!-- Publication Year -->
+                    <div class="form-group required">
+                        <label for="id_year">Publication Year</label>
+                        <input type="number" name="year" id="id_year" class="form-control" 
+                               value="{{ form.year.value|default:'' }}" min="1000" max="{% now 'Y' %}" required>
+                        {% if form.year.errors %}
+                        <div class="form-errors">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ form.year.errors }}
+                        </div>
+                        {% endif %}
+                        <div class="help-text">
+                            <i class="fas fa-info-circle"></i> Enter publication year (e.g., 2023)
+                        </div>
+                    </div>
+                    
+                    <!-- Publisher -->
+                    <div class="form-group">
+                        <label for="id_publisher">Publisher</label>
+                        <input type="text" name="publisher" id="id_publisher" class="form-control" 
+                               value="{{ form.publisher.value|default:'' }}">
+                        {% if form.publisher.errors %}
+                        <div class="form-errors">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ form.publisher.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Row for file size and download count -->
+                <div class="form-row">
+                    <!-- File Size -->
+                    <div class="form-group required">
+                        <label for="id_file_size">File Size (MB)</label>
+                        <input type="number" name="file_size" id="id_file_size" class="form-control" 
+                               value="{{ form.file_size.value|default:'' }}" step="0.1" min="0" required>
+                        {% if form.file_size.errors %}
+                        <div class="form-errors">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ form.file_size.errors }}
+                        </div>
+                        {% endif %}
+                        <div class="help-text">
+                            <i class="fas fa-info-circle"></i> Size of the book file in megabytes
+                        </div>
+                    </div>
+                    
+                    <!-- Download Count -->
+                    <div class="form-group required">
+                        <label for="id_download_count">Download Count</label>
+                        <input type="number" name="download_count" id="id_download_count" class="form-control" 
+                               value="{{ form.download_count.value|default:'0' }}" min="0" required>
+                        {% if form.download_count.errors %}
+                        <div class="form-errors">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ form.download_count.errors }}
+                        </div>
+                        {% endif %}
+                        <div class="help-text">
+                            <i class="fas fa-info-circle"></i> Number of times this book has been downloaded
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="id_description">Description</label>
+                    <textarea name="description" id="id_description" class="form-control textarea">{{ form.description.value|default:'' }}</textarea>
+                    {% if form.description.errors %}
+                    <div class="form-errors">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ form.description.errors }}
+                    </div>
+                    {% endif %}
+                    <div class="help-text">
+                        <i class="fas fa-info-circle"></i> Brief summary of the book
+                    </div>
+                </div>
+                
+                <!-- Row for file uploads -->
+                <div class="form-row">
+                    <!-- Cover Image -->
+                    <div class="form-group">
+                        <label for="id_cover_image">Cover Image</label>
+                        <input type="file" name="cover_image" id="id_cover_image" class="form-control file-input" 
+                               accept="image/*">
+                        {% if form.cover_image.errors %}
+                        <div class="form-errors">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ form.cover_image.errors }}
+                        </div>
+                        {% endif %}
+                        <div class="help-text">
+                            <i class="fas fa-info-circle"></i> Recommended size: 300x400px
+                        </div>
+                        <img id="imagePreview" class="preview-image" src="#" alt="Preview will appear here">
+                    </div>
+                    
+                    <!-- Book File -->
+                    <div class="form-group">
+                        <label for="id_book_file">Book File (PDF)</label>
+                        <input type="file" name="book_file" id="id_book_file" class="form-control file-input" 
+                               accept=".pdf,.epub,.mobi">
+                        {% if form.book_file.errors %}
+                        <div class="form-errors">
+                            <i class="fas fa-exclamation-circle"></i>
+                            {{ form.book_file.errors }}
+                        </div>
+                        {% endif %}
+                        <div class="help-text">
+                            <i class="fas fa-info-circle"></i> Upload the book file (PDF, EPUB, MOBI)
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Availability -->
+                <div class="form-group">
+                    <label for="id_is_available" style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" name="is_available" id="id_is_available" 
+                               {% if form.is_available.value %}checked{% endif %}>
+                        Make book available for borrowing
+                    </label>
+                    {% if form.is_available.errors %}
+                    <div class="form-errors">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ form.is_available.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <a href="{% url 'book-list' %}" class="btn-cancel">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-save"></i> Add Book
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Image preview functionality
+        const coverImageInput = document.getElementById('id_cover_image');
+        const imagePreview = document.getElementById('imagePreview');
+        
+        if (coverImageInput && imagePreview) {
+            coverImageInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.classList.add('visible');
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    imagePreview.classList.remove('visible');
+                }
+            });
+        }
+        
+        // Form validation
+        const bookForm = document.getElementById('bookForm');
+        if (bookForm) {
+            bookForm.addEventListener('submit', function(e) {
+                const requiredFields = bookForm.querySelectorAll('[required]');
+                let isValid = true;
+                let firstErrorField = null;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        field.style.borderColor = 'var(--danger-color)';
+                        if (!firstErrorField) {
+                            firstErrorField = field;
+                        }
+                    } else {
+                        field.style.borderColor = '';
+                    }
+                });
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('Please fill in all required fields marked with *.');
+                    if (firstErrorField) {
+                        firstErrorField.focus();
+                    }
+                }
+            });
+        }
+        
+        // Auto-format ISBN
+        const isbnField = document.getElementById('id_isbn');
+        if (isbnField) {
+            isbnField.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 13) value = value.substring(0, 13);
+                e.target.value = value;
+            });
+        }
+        
+        // Auto-format publication year
+        const yearField = document.getElementById('id_year');
+        if (yearField) {
+            yearField.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 4) value = value.substring(0, 4);
+                e.target.value = value;
+            });
+            
+            // Set default to current year
+            if (!yearField.value) {
+                const currentYear = new Date().getFullYear();
+                yearField.value = currentYear;
+            }
+        }
+        
+        // Set default download count to 0
+        const downloadCountField = document.getElementById('id_download_count');
+        if (downloadCountField && !downloadCountField.value) {
+            downloadCountField.value = 0;
+        }
+        
+        // Set default is_available to checked
+        const isAvailableField = document.getElementById('id_is_available');
+        if (isAvailableField && !isAvailableField.hasAttribute('checked')) {
+            isAvailableField.checked = true;
+        }
+    });
+</script>
+{% endblock %}

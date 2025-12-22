@@ -343,6 +343,12 @@
       .stat-card:nth-child(4) .stat-icon {
         background: linear-gradient(135deg, var(--info), #0284c7);
       }
+      .stat-card:nth-child(5) .stat-icon {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      }
+      .stat-card:nth-child(6) .stat-icon {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+      }
 
       .stat-content h3 {
         font-size: 0.9rem;
@@ -484,6 +490,18 @@
       .dashboard-card:nth-child(8) .card-icon {
         background: linear-gradient(135deg, #7c3aed, #6d28d9);
       }
+      .dashboard-card:nth-child(9) .card-icon {
+        background: linear-gradient(135deg, #10b981, #059669);
+      }
+      .dashboard-card:nth-child(10) .card-icon {
+        background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      }
+      .dashboard-card:nth-child(11) .card-icon {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      }
+      .dashboard-card:nth-child(12) .card-icon {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+      }
 
       .dashboard-card h3 {
         font-size: 1.1rem;
@@ -497,6 +515,155 @@
         color: var(--gray);
         margin: 0;
         line-height: 1.5;
+      }
+
+      /* Library Section */
+      .library-section {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 30px;
+        box-shadow: var(--shadow);
+        margin-bottom: 40px;
+        border: 2px solid transparent;
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .library-section:hover {
+        border-color: var(--primary-light);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .library-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(to right, #8b5cf6, #7c3aed);
+      }
+
+      .library-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+
+      .library-header h2 {
+        font-family: "Poppins", sans-serif;
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--dark);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .library-header h2 i {
+        color: #8b5cf6;
+      }
+
+      .library-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+      }
+
+      .library-card {
+        background: var(--light);
+        border-radius: var(--border-radius-sm);
+        padding: 25px;
+        text-align: center;
+        text-decoration: none;
+        color: var(--dark);
+        transition: var(--transition);
+        border: 2px solid transparent;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .library-card:hover {
+        transform: translateY(-5px);
+        background: white;
+        box-shadow: 0 15px 40px rgba(139, 92, 246, 0.15);
+        border-color: #8b5cf6;
+      }
+
+      .library-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: white;
+        transition: var(--transition);
+      }
+
+      .library-card:nth-child(1) .library-icon {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      }
+
+      .library-card:nth-child(2) .library-icon {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+      }
+
+      .library-card h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+        color: var(--dark);
+      }
+
+      .library-card p {
+        font-size: 0.85rem;
+        color: var(--gray);
+        margin: 0;
+        line-height: 1.5;
+      }
+
+      .library-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid var(--gray-light);
+      }
+
+      .library-stat {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        background: var(--light);
+        border-radius: var(--border-radius-sm);
+      }
+
+      .library-stat i {
+        color: #8b5cf6;
+        font-size: 18px;
+      }
+
+      .library-stat h4 {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .library-stat p {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin: 0;
       }
 
       /* System Status */
@@ -713,6 +880,23 @@
         font-weight: 600;
       }
 
+      /* New Book Badge */
+      .new-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: linear-gradient(135deg, var(--success), #059669);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        z-index: 2;
+      }
+
       /* Responsive Design */
       @media (max-width: 1200px) {
         .admin-container {
@@ -735,6 +919,10 @@
 
         .dashboard-grid {
           grid-template-columns: repeat(2, 1fr);
+        }
+
+        .library-grid {
+          grid-template-columns: 1fr;
         }
       }
 
@@ -768,6 +956,16 @@
         .quick-stats {
           grid-template-columns: repeat(2, 1fr);
         }
+
+        .library-header {
+          flex-direction: column;
+          text-align: center;
+          gap: 15px;
+        }
+
+        .library-stats {
+          grid-template-columns: 1fr;
+        }
       }
 
       @media (max-width: 576px) {
@@ -794,6 +992,10 @@
 
         .dashboard-card {
           padding: 25px 20px;
+        }
+
+        .library-card {
+          padding: 20px;
         }
 
         .quick-stats {
@@ -847,7 +1049,7 @@
                 <h1>Welcome, Administrator!</h1>
                 <p class="admin-subtitle">
                   Manage system settings, monitor activities, and oversee all
-                  operations.
+                  operations including library management.
                 </p>
               </div>
             </div>
@@ -864,6 +1066,10 @@
               <div class="meta-badge">
                 <i class="fas fa-clock"></i>
                 <span>Last Login: {{ last_login }}</span>
+              </div>
+              <div class="meta-badge">
+                <i class="fas fa-book"></i>
+                <span>Library Access</span>
               </div>
             </div>
 
@@ -958,7 +1164,95 @@
             </div>
           </div>
         </div>
+
+        <!-- New Library Stats -->
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-book"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Total Books</h3>
+            <div class="stat-value">{{ total_books|default:"0" }}</div>
+            <div class="stat-trend trend-up">
+              <i class="fas fa-arrow-up"></i>
+              <span>{{ new_books_this_month|default:"0" }} this month</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-book-reader"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Books Borrowed</h3>
+            <div class="stat-value">{{ books_borrowed|default:"0" }}</div>
+            <div class="stat-trend trend-up">
+              <i class="fas fa-arrow-up"></i>
+              <span>{{ active_borrowers|default:"0" }} active</span>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <!-- Library Management Section -->
+      <section class="library-section">
+        <div class="library-header">
+          <h2><i class="fas fa-book"></i> Library Management</h2>
+          <span class="new-badge">New Feature</span>
+        </div>
+
+        <div class="library-grid">
+          <!-- Add Books Button -->
+          <a href="{% url 'add-book' %}" class="library-card">
+            <div class="library-icon">
+              <i class="fas fa-plus-circle"></i>
+            </div>
+            <h3>Add Books to Library</h3>
+            <p>Add new books to the digital library with cover images, descriptions, and metadata</p>
+          </a>
+
+          <!-- List All Books Button -->
+          <a href="{% url 'book-list' %}" class="library-card">
+            <div class="library-icon">
+              <i class="fas fa-list"></i>
+            </div>
+            <h3>List All Books</h3>
+            <p>Browse, search, and manage all books in the library collection</p>
+          </a>
+        </div>
+
+        <div class="library-stats">
+          <div class="library-stat">
+            <i class="fas fa-book"></i>
+            <div>
+              <h4>Total Books</h4>
+              <p>{{ total_books|default:"0" }}</p>
+            </div>
+          </div>
+          <div class="library-stat">
+            <i class="fas fa-check-circle"></i>
+            <div>
+              <h4>Available Books</h4>
+              <p>{{ available_books|default:"0" }}</p>
+            </div>
+          </div>
+          <div class="library-stat">
+            <i class="fas fa-clock"></i>
+            <div>
+              <h4>Pending Returns</h4>
+              <p>{{ pending_returns|default:"0" }}</p>
+            </div>
+          </div>
+          <div class="library-stat">
+            <i class="fas fa-users"></i>
+            <div>
+              <h4>Active Readers</h4>
+              <p>{{ active_readers|default:"0" }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- Quick Stats -->
       <div class="quick-stats">
@@ -1049,7 +1343,7 @@
             <div class="card-icon">
               <i class="fas fa-user-edit"></i>
             </div>
-            <h3>Add students</h3>
+            <h3>Add Students</h3>
             <p>Add students to students database</p>
           </a>
 
@@ -1077,6 +1371,7 @@
             <p>Browse and manage all teacher accounts</p>
           </a>
 
+          <!-- Library Management Cards (moved to top section) -->
           <!-- Additional Admin Features -->
           <a href="{% url 'system_settings' %}" class="dashboard-card">
             <div class="card-icon">
@@ -1100,6 +1395,23 @@
             </div>
             <h3>Reports & Analytics</h3>
             <p>Generate reports and view system analytics</p>
+          </a>
+
+          <!-- Additional Cards -->
+          <a href="{% url 'book_management' %}" class="dashboard-card">
+            <div class="card-icon">
+              <i class="fas fa-book-medical"></i>
+            </div>
+            <h3>Book Management</h3>
+            <p>Edit, delete, and manage library books</p>
+          </a>
+
+          <a href="{% url 'borrow_management' %}" class="dashboard-card">
+            <div class="card-icon">
+              <i class="fas fa-exchange-alt"></i>
+            </div>
+            <h3>Borrow Management</h3>
+            <p>Track book borrowings and returns</p>
           </a>
         </div>
       </section>
@@ -1139,12 +1451,13 @@
       <!-- Footer -->
       <footer class="dashboard-footer">
         <p>Karmo Development Center • Admin Dashboard v1.0</p>
-        <p>Secure administration panel for system management</p>
+        <p>Secure administration panel for system management including library</p>
 
         <div class="footer-links">
           <a href="{% url 'profile' %}">Back to Profile</a>
           <a href="{% url 'system_health' %}">System Health</a>
           <a href="{% url 'audit_logs' %}">Audit Logs</a>
+          <a href="{% url 'book-list' %}">View Library</a>
           <a href="{% url 'logout' %}">Logout</a>
         </div>
       </footer>
@@ -1171,7 +1484,7 @@
         // Observe all cards for animation
         document
           .querySelectorAll(
-            ".stat-card, .dashboard-card, .status-item, .quick-stat"
+            ".stat-card, .dashboard-card, .status-item, .quick-stat, .library-card"
           )
           .forEach((card) => {
             card.style.opacity = "0";
@@ -1180,7 +1493,7 @@
           });
 
         // Add loading animation to buttons
-        document.querySelectorAll(".dashboard-card").forEach((card) => {
+        document.querySelectorAll(".dashboard-card, .library-card").forEach((card) => {
           card.addEventListener("click", function (e) {
             const originalHTML = this.innerHTML;
             this.innerHTML = `
@@ -1208,6 +1521,17 @@
               }, 200);
             }, 200);
           });
+        }
+
+        // Highlight library section
+        const librarySection = document.querySelector('.library-section');
+        if (librarySection) {
+          setTimeout(() => {
+            librarySection.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+              librarySection.style.transform = 'scale(1)';
+            }, 300);
+          }, 1000);
         }
 
         // Update current time
@@ -1258,7 +1582,30 @@
             e.preventDefault();
             window.location.href = "{% url 'profile' %}";
           }
+
+          // Ctrl+B for Books (Add)
+          if (e.ctrlKey && e.key === "b") {
+            e.preventDefault();
+            window.location.href = "{% url 'add-book' %}";
+          }
+
+          // Ctrl+V for View Books
+          if (e.ctrlKey && e.key === "v") {
+            e.preventDefault();
+            window.location.href = "{% url 'book-list' %}";
+          }
         });
+
+        // Add pulse animation to library cards
+        setInterval(() => {
+          const libraryCards = document.querySelectorAll('.library-card');
+          libraryCards.forEach(card => {
+            card.style.boxShadow = '0 10px 30px rgba(139, 92, 246, 0.2)';
+            setTimeout(() => {
+              card.style.boxShadow = '';
+            }, 500);
+          });
+        }, 5000);
       });
     </script>
   </body>
