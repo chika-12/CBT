@@ -117,3 +117,8 @@ def getLoginHistory(request):
     history = models.LoginHistory.objects.all()
     history = annotate_login_history_with_location(history)
     return render(request, "login_history.html", {"history": history})
+  
+
+def vision_bearer_page(request):
+  """Render the Vision Bearer page"""
+  return render(request, 'vision_bearer.html')
