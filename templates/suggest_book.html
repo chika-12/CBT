@@ -1,0 +1,412 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Suggest a Book{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Book Suggestion Form Styles */
+    .suggestion-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+    }
+
+    .suggestion-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .suggestion-header h1 {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+
+    .suggestion-header p {
+        color: #7f8c8d;
+        font-size: 1.1rem;
+    }
+
+    .suggestion-form {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        padding: 2.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.8rem;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.85rem 1.2rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #3498db;
+        background-color: white;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+
+    .form-control::placeholder {
+        color: #95a5a6;
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    /* Radio Button Styling */
+    .radio-group {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .radio-option {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .radio-option input[type="radio"] {
+        display: none;
+    }
+
+    .radio-custom {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #3498db;
+        border-radius: 50%;
+        margin-right: 10px;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .radio-custom::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 10px;
+        height: 10px;
+        background: #3498db;
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    input[type="radio"]:checked + .radio-custom::after {
+        opacity: 1;
+    }
+
+    .radio-text {
+        color: #34495e;
+        font-weight: 500;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+        background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+        color: white;
+        border: none;
+        padding: 1rem 2.5rem;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: block;
+        margin: 3rem auto 0;
+        min-width: 200px;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+    }
+
+    .submit-btn:active {
+        transform: translateY(0);
+    }
+
+    /* Success Message */
+    .success-message {
+        background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        text-align: center;
+        margin-top: 2rem;
+        animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .success-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .suggestion-container {
+            padding: 1rem;
+            margin: 1rem auto;
+        }
+
+        .suggestion-form {
+            padding: 1.5rem;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .suggestion-header h1 {
+            font-size: 2rem;
+        }
+
+        .radio-group {
+            flex-direction: column;
+            gap: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .suggestion-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            min-width: unset;
+        }
+    }
+
+    /* Optional: Book Icon */
+    .book-icon {
+        font-size: 4rem;
+        color: #3498db;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="suggestion-container">
+    <div class="suggestion-header">
+        <div class="book-icon">
+            <i class="fas fa-book-open"></i>
+        </div>
+        <h1>Suggest a Book</h1>
+        <p>Help us grow our collection by suggesting books you'd love to see in our library</p>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="success-message">
+                    <div class="success-icon">✓</div>
+                    <h3>Thank You!</h3>
+                    <p>{{ message }}</p>
+                    <a href="{% url 'profile' %}" class="btn btn-outline-light mt-3">Return to Home</a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <form method="POST" class="suggestion-form" action="{% url 'suggest_book' %}">
+            {% csrf_token %}
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="title">Book Title *</label>
+                    <input type="text" 
+                           id="title" 
+                           name="title" 
+                           class="form-control" 
+                           placeholder="Enter book title"
+                           required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="author">Author *</label>
+                    <input type="text" 
+                           id="author" 
+                           name="author" 
+                           class="form-control" 
+                           placeholder="Author's full name"
+                           required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="isbn">ISBN (Optional)</label>
+                    <input type="text" 
+                           id="isbn" 
+                           name="isbn" 
+                           class="form-control" 
+                           placeholder="13-digit ISBN">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="publication_year">Publication Year</label>
+                    <input type="number" 
+                           id="publication_year" 
+                           name="publication_year" 
+                           class="form-control" 
+                           min="1900" 
+                           max="{% now 'Y' %}"
+                           placeholder="YYYY">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="genre">Genre/Category</label>
+                <select id="genre" name="genre" class="form-control">
+                    <option value="">Select a genre</option>
+                    <option value="fiction">Fiction</option>
+                    <option value="non-fiction">Non-Fiction</option>
+                    <option value="science">Science</option>
+                    <option value="technology">Technology</option>
+                    <option value="history">History</option>
+                    <option value="biography">Biography</option>
+                    <option value="fantasy">Fantasy</option>
+                    <option value="mystery">Mystery</option>
+                    <option value="romance">Romance</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="reason">Why should we add this book? *</label>
+                <textarea id="reason" 
+                          name="reason" 
+                          class="form-control" 
+                          placeholder="Tell us why this book would be valuable to our library..."
+                          required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">How did you hear about this book?</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="source" value="friend">
+                        <span class="radio-custom"></span>
+                        <span class="radio-text">Friend Recommendation</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="source" value="online">
+                        <span class="radio-custom"></span>
+                        <span class="radio-text">Online Review</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="source" value="other">
+                        <span class="radio-custom"></span>
+                        <span class="radio-text">Other</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="notes">Additional Notes (Optional)</label>
+                <textarea id="notes" 
+                          name="notes" 
+                          class="form-control" 
+                          placeholder="Any additional information about the book..."></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-paper-plane"></i> Submit Suggestion
+            </button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Form validation and enhancement
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('.suggestion-form');
+        
+        if (form) {
+            // Add floating label effect
+            const inputs = form.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+                
+                input.addEventListener('blur', function() {
+                    if (!this.value) {
+                        this.parentElement.classList.remove('focused');
+                    }
+                });
+                
+                // Check if input has value on page load
+                if (input.value) {
+                    input.parentElement.classList.add('focused');
+                }
+            });
+            
+            // Character counter for reason textarea
+            const reasonTextarea = document.getElementById('reason');
+            if (reasonTextarea) {
+                const counter = document.createElement('div');
+                counter.className = 'char-counter';
+                counter.style.cssText = 'text-align: right; font-size: 0.85rem; color: #7f8c8d; margin-top: 0.5rem;';
+                reasonTextarea.parentElement.appendChild(counter);
+                
+                reasonTextarea.addEventListener('input', function() {
+                    counter.textContent = `${this.value.length}/500 characters`;
+                });
+            }
+            
+            // Form submission animation
+            form.addEventListener('submit', function(e) {
+                const submitBtn = this.querySelector('.submit-btn');
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                submitBtn.disabled = true;
+            });
+        }
+    });
+</script>
+{% endblock %}

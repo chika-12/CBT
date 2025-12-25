@@ -1055,50 +1055,6 @@
           </div>
         </div>
 
-        <!-- Fees Payment Card -->
-        <div class="dashboard-card">
-          <div class="card-header">
-            <h2 class="card-title">
-              <div class="card-icon">
-                <i class="fas fa-credit-card"></i>
-              </div>
-              Fees & Payments
-            </h2>
-            <div class="card-stats" id="totalDue">$1,250</div>
-          </div>
-          <div class="card-content">
-            <p>Pay tuition fees, access fee, and view payment history.</p>
-            <div class="fees-status">
-              <div>
-                <div class="fees-amount" id="totalFees">$2,500</div>
-                <div>Total Fees</div>
-              </div>
-              <div>
-                <div class="fees-paid" id="paidAmount">$1,250</div>
-                <div>Paid</div>
-              </div>
-              <div>
-                <div class="fees-due" id="dueAmount">$1,250</div>
-                <div>Due</div>
-              </div>
-            </div>
-            <p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7)">
-              Due Date:
-              <span id="dueDate">June 15, 2024</span>
-            </p>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-success" onclick="showPaymentModal()">
-              <i class="fas fa-dollar-sign"></i>
-              Pay Now
-            </button>
-            <a href="#" class="btn btn-secondary" onclick="showPaymentHistory()">
-              <i class="fas fa-history"></i>
-              Payment History
-            </a>
-          </div>
-        </div>
-
         <!-- Digital Library Card -->
         <div class="dashboard-card">
           <div class="card-header">
@@ -1144,10 +1100,10 @@
             </div>
           </div>
           <div class="card-actions">
-            <button class="btn btn-primary" onclick="showLibraryModal()">
+            <a href="{% url 'book-list' %}" class="btn btn-primary">
               <i class="fas fa-search"></i>
               Browse Library
-            </button>
+            </a>
             <a href="#" class="btn btn-secondary" onclick="showBorrowedBooks()">
               <i class="fas fa-bookmark"></i>
               My Borrowed

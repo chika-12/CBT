@@ -2,10 +2,11 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator, FileExtensionValidator
 from django.utils import timezone
 from cloudinary.models import CloudinaryField
-
+import uuid
+from django.conf import settings
 
 class Books(models.Model):
-    # Book cover image
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     cover_image = CloudinaryField(
         'cover_image',
         folder='books/covers/',
@@ -28,7 +29,7 @@ class Books(models.Model):
         null=True,
         resource_type='raw',  # Important for PDF/files
         help_text="Upload book file (PDF, EPUB, etc.)",
-        validators=[FileExtensionValidator(['pdf', 'epub', 'mobi', 'txt'])]
+        validators=[FileExtensionValidator(['pdf', 'epub', 'mobi', 'txt', 'PDF'])]
     )
     
     # Thumbnail for quick preview
@@ -186,3 +187,48 @@ class Books(models.Model):
     def is_pdf(self):
         """Check if book is PDF"""
         return self.file_format and self.file_format.lower() == 'pdf'
+    
+    
+# Suggest a Book Model
+
+from django.db import models
+from django.contrib.auth.models import User
+
+class BookSuggestion(models.Model):
+    GENRE_CHOICES = [
+        ('fiction', 'Fiction'),
+        ('non-fiction', 'Non-Fiction'),
+        ('science', 'Science'),
+        ('technology', 'Technology'),
+        ('history', 'History'),
+        ('biography', 'Biography'),
+        ('fantasy', 'Fantasy'),
+        ('mystery', 'Mystery'),
+        ('romance', 'Romance'),
+        ('other', 'Other'),
+    ]
+    
+    SOURCE_CHOICES = [
+        ('friend', 'Friend Recommendation'),
+        ('online', 'Online Review'),
+        ('other', 'Other'),
+    ]
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+    title = models.CharField(max_length=200)
+    author = models.CharField(max_length=100)
+    isbn = models.CharField(max_length=13, blank=True, null=True)
+    publication_year = models.IntegerField(null=True, blank=True)
+    genre = models.CharField(max_length=50, choices=GENRE_CHOICES)
+    reason = models.TextField()
+    source = models.CharField(max_length=50, choices=SOURCE_CHOICES, blank=True)
+    notes = models.TextField(blank=True)
+    suggested_at = models.DateTimeField(auto_now_add=True)
+    reviewed = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['-suggested_at']
+    
+    def __str__(self):
+        return f"{self.title} by {self.author}"

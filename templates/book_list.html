@@ -100,6 +100,10 @@
         box-shadow: var(--box-shadow);
         transition: var(--transition);
         position: relative;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        display: block;
     }
 
     .book-card:hover {
@@ -380,7 +384,7 @@
         {% if page_obj %}
             <div class="books-grid">
                 {% for book in page_obj %}
-                <div class="book-card">
+                <a href="{% url 'read_book' book.id %}" class="book-card">
                     <div class="book-image">
                         {% if book.cover_image %}
                             <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" style="width: 100%; height: 100%; object-fit: cover;">
@@ -421,21 +425,21 @@
                         </div>
                         
                         <div class="book-actions">
-                            <a href="#" class="btn btn-view">
-                                <i class="fas fa-eye"></i> View Details
-                            </a>
+                            <span class="btn btn-view">
+                                <i class="fas fa-book-open"></i> Read Book
+                            </span>
                             {% if request.user.is_authenticated and book.is_available %}
-                            <a href="#" class="btn btn-borrow">
+                            <a href="#" class="btn btn-borrow" onclick="event.stopPropagation();">
                                 <i class="fas fa-bookmark"></i> Borrow
                             </a>
                             {% else %}
-                            <button class="btn btn-borrow" disabled>
+                            <span class="btn btn-borrow" style="cursor: not-allowed;">
                                 <i class="fas fa-bookmark"></i> Unavailable
-                            </button>
+                            </span>
                             {% endif %}
                         </div>
                     </div>
-                </div>
+                </a>
                 {% endfor %}
             </div>
         {% else %}
@@ -514,7 +518,7 @@
                 <i class="fas fa-plus-circle"></i> Add New Book
             </a>
             {% elif request.user.is_authenticated %}
-            <a href="#" class="cta-button">
+            <a href="{% url 'suggest_book' %}" class="cta-button">
                 <i class="fas fa-lightbulb"></i> Suggest a Book
             </a>
             {% else %}
@@ -561,6 +565,15 @@
         if (bookCount) {
             // This will be handled by Django template
         }
+        
+        // Prevent borrow button clicks from triggering card click
+        document.querySelectorAll('.btn-borrow').forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (!this.hasAttribute('href') || this.getAttribute('href') === '#') {
+                    e.preventDefault();
+                }
+            });
+        });
     });
 </script>
 {% endblock %}
