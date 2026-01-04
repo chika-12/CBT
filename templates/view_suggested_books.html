@@ -721,7 +721,7 @@
                     <td class="user-info">
                         {% if suggestion.user %}
                         <div class="user-name">
-                            {{ suggestion.user.get_full_name|default:suggestion.user.first_name}}
+                            {{ suggestion.user.get_full_name|default:suggestion.user.first_name }}
                         </div>
                         <div class="user-email">{{ suggestion.user.email }}</div>
                         {% if suggestion.user.groups.all %}

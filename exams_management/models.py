@@ -25,7 +25,7 @@ class Test(models.Model):
 class Questions(models.Model):
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   test = models.ForeignKey("Test", on_delete=models.CASCADE, related_name="questions")
-  question_text = models.CharField(max_length=500)  # Increased length
+  question_text = models.CharField(max_length=500)
   question_type = models.CharField(
       max_length=20,
       choices=[('single', 'Single Choice'), ('multiple', 'Multiple Choice')],
