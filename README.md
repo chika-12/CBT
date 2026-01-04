@@ -39,7 +39,7 @@ A comprehensive Django-based school management platform featuring Computer-Based
 - **Parents** - Progress monitoring
 
 ## 🚀 Live Demo
-Access the platform at: [https://kdc-portal.onrender.com](https://kdc-portal.onrender.com)
+Access the platform at: [https://cbt-1-sx6g.onrender.com](https://cbt-1-sx6g.onrender.com)
 
 ## 🛠️ Technology Stack
 
