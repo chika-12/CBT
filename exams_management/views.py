@@ -8,7 +8,7 @@ from teachers_users2_management.models import Teacher
 from users.models import Profile
 from .utils import calculate_score
 from django.utils import timezone
-
+from teachers_users2_management.models import Student
 def ensure_teacher(request):
   try:
     profile = Profile.objects.get(user=request.user)
@@ -385,37 +385,47 @@ def choice_delete(request, choice_id):
 def student_test_list(request):
     """View all published tests available for students"""
     try:
-        profile = Profile.objects.get(user=request.user)
+      profile = Profile.objects.get(user=request.user)
+      student_model = Student.objects.get(user=request.user)
     except Profile.DoesNotExist:
-        messages.error(request, "Profile not found.")
-        return redirect("profile")
+      messages.error(request, "Profile not found.")
+      return redirect("profile")
+    except Student.DoesNotExist:
+      messages.error(request, "Student record not found")
+      return redirect("profile")
+      
         
     if profile.role != "student":
-        messages.error(request, "Only students can view tests.")
-        return redirect("profile")
+      messages.error(request, "Only students can view tests.")
+      return redirect("profile")
         
-    published_tests = models.Test.objects.filter(is_published=True)
+    published_tests = models.Test.objects.filter(is_published=True, class_level=student_model.class_level)
+    #students_published_test = []
+    # for test in published_tests:
+    #   if test.class_level == student_model.class_level:
+    #     students_published_test.append(test)
     
     # Get completed attempts for this student
     completed_attempts = models.StudentTestAttempt.objects.filter(
-        student=request.user,
-        is_completed=True
+      student=request.user,
+      is_completed=True
     )
     
     # Create a list of tests with attempt info
     tests_with_info = []
     for test in published_tests:
-        # Find if this test has been completed by the student
-        attempt = completed_attempts.filter(test=test).first()
+      # Find if this test has been completed by the student
+      attempt = completed_attempts.filter(test=test).first()
+      
         
-        tests_with_info.append({
-            'test': test,
-            'has_attempt': attempt is not None,
-            'attempt_id': attempt.id if attempt else None
-        })
+      tests_with_info.append({
+        'test': test,
+        'has_attempt': attempt is not None,
+        'attempt_id': attempt.id if attempt else None
+      })
     
     return render(request, "student_test_list.html", {
-        "tests_with_info": tests_with_info,
+      "tests_with_info": tests_with_info,
     })
 
 

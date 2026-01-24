@@ -90,13 +90,20 @@ WSGI_APPLICATION = "CBT.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
+DATABASES = {
+  'default': dj_database_url.config(
+    default=os.environ.get("DATABASE_URL"),
+    conn_max_age=600,
+    ssl_require=False
+  )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -190,4 +197,7 @@ else:
     # Fallback to local storage
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
     print("⚠️ Cloudinary not fully configured. Using local file storage.")
-    print("   Please ensure .env file exists with:")
+    print("   Please ensure .env file exists with:")#ghp_r4Z30xw39PgjIT6hEka2FjkJDvOkHO3P0Xkiq
+    
+    
+    

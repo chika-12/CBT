@@ -10,6 +10,7 @@ class Test(models.Model):
   subject = models.CharField(max_length=230)
   teacher = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
   description = models.TextField(blank=True, null=True)
+  class_level = models.CharField(blank=False, null=False, max_length=280, default="No Class")# new feature
   time_limit = models.IntegerField(default=60)
   is_published = models.BooleanField(default=False)
   date_added = models.DateTimeField(auto_now_add=True)
