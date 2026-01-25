@@ -12,6 +12,6 @@ class Teacher(models.Model):
 class Student(models.Model):
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-  class_level = models.CharField(blank=False, null=False, max_length=280, default="No Class") #new feature
+  #class_level = models.CharField(blank=False, null=False, max_length=280, default="No Class") #new feature
   is_active = models.BooleanField(default=True)
   date_added = models.DateField(auto_now=True)

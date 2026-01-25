@@ -386,20 +386,16 @@ def student_test_list(request):
     """View all published tests available for students"""
     try:
       profile = Profile.objects.get(user=request.user)
-      student_model = Student.objects.get(user=request.user)
     except Profile.DoesNotExist:
       messages.error(request, "Profile not found.")
       return redirect("profile")
-    except Student.DoesNotExist:
-      messages.error(request, "Student record not found")
-      return redirect("profile")
-      
+         
         
     if profile.role != "student":
       messages.error(request, "Only students can view tests.")
       return redirect("profile")
         
-    published_tests = models.Test.objects.filter(is_published=True, class_level=student_model.class_level)
+    published_tests = models.Test.objects.filter(is_published=True)
     #students_published_test = []
     # for test in published_tests:
     #   if test.class_level == student_model.class_level:
